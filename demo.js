@@ -1,7 +1,7 @@
-const config = require('config')
+const config = require('./config/sources')['uipath']
 const { OrchestratorApi } = require('uipath-orchestrator-api-node')
 
-const oc = new OrchestratorApi ( config.uipath )    
+const oc = new OrchestratorApi ( config )    
  
 const main = async () => {
   const token = await oc.authenticate()

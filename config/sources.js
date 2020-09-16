@@ -1,5 +1,6 @@
+const sources = 
 {
-  "uipath": {
+  'uipath': {
     "serverinfo": {
       "servername": "https://platform.uipath.com/trailingspacell/TrailingSpavyun205999",
       "refresh_token": "MUWI7ONqd347Zpoc4FvhgT8K9HHKZZKdXhdRyYUrOcgJF",
@@ -8,3 +9,5 @@
     }
   }
 }
+
+export default sources

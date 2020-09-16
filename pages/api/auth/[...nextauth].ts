@@ -1,13 +1,23 @@
 import NextAuth from 'next-auth'
 import providers from '../../../config/auth'
+import config from '../../../lib/config'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-const options = {
-  // Configure one or more authentication providers
-  providers
+function setup(req: NextApiRequest, res: NextApiResponse<any>) {
+  config.get().then((configs) => {
+    const options = {
+      // Configure one or more authentication providers
+      providers,
+      secret: configs.secret,
+      jwt: {
+        secret: configs.secret
+      }
 
-  // A database is optional, but required to persist accounts in a database
-  // database: process.env.DATABASE_URL,
+      // A database is optional, but required to persist accounts in a database
+      // database: process.env.DATABASE_URL,
+    }
+    NextAuth(req, res, options)
+  })
 }
 
-export default (req: NextApiRequest, res: NextApiResponse<any>) => NextAuth(req, res, options)
+export default (req: NextApiRequest, res: NextApiResponse<any>) => setup(req, res)
