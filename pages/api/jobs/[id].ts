@@ -1,9 +1,9 @@
+
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Token } from '../../../lib/token'
-import processes from '../../../config/processes'
 import sources from '../../../config/sources'
 import authenticate from '../../../middleware/authenticate'
-import { UiPathProcess } from '../../../lib/Process'
+import { UiPathJob } from '../../../lib/Job'
 
 export const handler = async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
   // TODO: Authorize, not just authenticate
@@ -12,15 +12,12 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse, token: 
     res.json({Error: "Not Authorized"})
     return
   }
-  let process = null
-  for (let name in processes) {
-    if (name === req.query.id) {
-      process = new UiPathProcess(name, processes[name], sources['uipath'])
-    }
-  }
-  await process.info()
+  console.log(req.query.id)
+  const id: string = Array.isArray(req.query.id) ? req.query.id[0]: req.query.id
+  const job = new UiPathJob(id, sources['uipath'])
+  console.log(await job.info())
   res.statusCode = 200
-  res.json(process.processInfo)
+  res.json(job.jobInfo)
 }
 
 export default authenticate(handler)
