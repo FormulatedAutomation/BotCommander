@@ -1,7 +1,7 @@
 import jwt from 'next-auth/jwt'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { get as getConfig } from './config'
+import { get as getConfig } from '../lib/config'
 
 export interface Token {
   name: string
