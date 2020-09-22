@@ -1,6 +1,5 @@
-import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-
+import Layout from "../components/Layout";
 import React from 'react'
 import { signIn, signOut, useSession } from 'next-auth/client'
 
@@ -8,11 +7,7 @@ export default function Page() {
   const [ session, loading ] = useSession()
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>BotCommander</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Layout>
       {!session && <>
         Not signed in <br />
         <button onClick={signIn}>Sign in</button>
@@ -21,6 +16,6 @@ export default function Page() {
         Signed in as {session.user.email} <br />
         <button onClick={signOut}>Sign out</button>
       </>}
-    </div>
+    </Layout>
   )
 }

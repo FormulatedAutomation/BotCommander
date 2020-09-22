@@ -4,7 +4,7 @@ import config from '../../../lib/config'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 function setup(req: NextApiRequest, res: NextApiResponse<any>) {
-  config.get().then((configs) => {
+  return config.get().then((configs) => {
     const options = {
       // Configure one or more authentication providers
       providers,
@@ -16,7 +16,7 @@ function setup(req: NextApiRequest, res: NextApiResponse<any>) {
       // A database is optional, but required to persist accounts in a database
       // database: process.env.DATABASE_URL,
     }
-    NextAuth(req, res, options)
+    return NextAuth(req, res, options)
   })
 }
 
