@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { UiPathProcess } from '../../../../server/models/Process'
+import { UiPathBot } from '../../../../server/models/Bot'
 import { BotCommandContext, ensureLoggedIn } from '../../../../server/middleware/context'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCommandContext) => {
@@ -8,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCo
   for (let name in bots) {
     let bot = bots[name]
     if (name === req.query.id) {
-      process = new UiPathProcess(name, bot, sources[bot.source])
+      process = new UiPathBot(name, bot, sources[bot.source])
     }
   }
   if (process) {

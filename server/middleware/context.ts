@@ -1,30 +1,33 @@
 import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next'
-import * as config from '../../config/api'
+import {BotsConfig, get as getConfig} from '../../lib/config'
 
 import {getToken, Token} from '../token'
 
 export interface BotCommandContext {
-  bots: object
+  bots: BotsConfig
   acl: object
   sources: object
   token: Token
+}
+
+async function getContext(req: NextApiRequest): Promise<BotCommandContext> {
+  const token = await getToken(req)
+  const config = await getConfig()
+  return {
+    acl: config.acl,
+    bots: config.bots,
+    sources: config.sources,
+    token: token,
+  }
 }
 
 export function setup(handler: (req: NextApiRequest, res: NextApiResponse,
   context?: BotCommandContext) => void | Promise<void>) {
   return (req: NextApiRequest, res: NextApiResponse) => {
     return new Promise((resolve, reject)=>{
-      getToken(req).then((token) => {
-        const context = {
-          acl: config.acl,
-          bots: config.bots,
-          sources: config.sources,
-          token: token,
-        }
-        resolve(
-          handler(req, res, context)
-        )
-      }).catch((e) => reject(e))
+      return getContext(req)
+        .then((context) => handler(req, res, context))
+        .catch((e) => reject(e))
     })
   }
 }
@@ -33,22 +36,16 @@ export function ensureLoggedIn(handler: (req: NextApiRequest, res: NextApiRespon
   context?: BotCommandContext) => void | Promise<void>) {
   return (req: NextApiRequest, res: NextApiResponse) => {
     return new Promise((resolve, reject)=>{
-      getToken(req).then((token) => {
-        const context = {
-          acl: config.acl,
-          bots: config.bots,
-          sources: config.sources,
-          token: token,
-        }
-        if (!token) {
-          res.statusCode = 401
-          res.json({Error: "Must Be Authenticated"})
-          return
-        }
-        resolve(
-          handler(req, res, context)
-        )
-      }).catch((e) => reject(e))
+      return getContext(req)
+        .then((ctx) => {
+          if (!ctx.token) {
+            res.statusCode = 401
+            res.json({ Error: "Must Be Authenticated" })
+            return null
+          }
+          return handler(req, res, ctx)
+        })
+        .catch((e) => reject(e))
     })
   }
 }

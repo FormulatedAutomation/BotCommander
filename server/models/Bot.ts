@@ -1,10 +1,12 @@
 import { OrchestratorApi } from 'uipath-orchestrator-api-node'
+import { BotConfig } from '../../lib/config'
+import RoboCloudAPI from '../services/robocloud'
 
-export class Process {
+export class Bot {
 
 }
 
-export class UiPathProcess extends Process {
+export class UiPathBot extends Bot {
   api: OrchestratorApi
   processName: string
   process: object
@@ -65,5 +67,22 @@ export class UiPathProcess extends Process {
     // Don't refetch unless it's forced
   }
 
+}
+
+export class RoboCloudBot extends Bot {
+  bot: BotConfig
+  botName: string
+  service: RoboCloudAPI
+
+  constructor(botName: string, bot: BotConfig) {
+    super()
+    this.botName = botName
+    this.bot = bot
+    this.service = new RoboCloudAPI(process)
+  }
+
+  async start(inputArgs: object) {
+    return await this.service.start(inputArgs)
+  }
 
 }
