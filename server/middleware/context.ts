@@ -32,9 +32,7 @@ export function setup(handler: (req: NextApiRequest, res: NextApiResponse,
 export function ensureLoggedIn(handler: (req: NextApiRequest, res: NextApiResponse,
   context?: BotCommandContext) => void | Promise<void>) {
   return (req: NextApiRequest, res: NextApiResponse) => {
-    console.log("Handling")
     return new Promise((resolve, reject)=>{
-      console.log("Promise")
       getToken(req).then((token) => {
         const context = {
           acl: config.acl,
