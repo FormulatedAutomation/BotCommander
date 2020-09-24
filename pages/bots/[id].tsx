@@ -2,7 +2,6 @@ import Layout from '../../components/Layout'
 import {AppProps} from 'next/dist/next-server/lib/router/router'
 import {GetServerSideProps, GetServerSidePropsContext, NextPageContext} from 'next'
 import {getSession} from 'next-auth/client'
-import {botKey} from '../../utils';
 import {useState} from 'react';
 import dynamic from 'next/dynamic'
 import ErrorAlert from "../../components/ErrorAlert";
@@ -16,7 +15,7 @@ const BotView = ({botInfo}: AppProps) => {
 
   const handleBotRun = async () => {
     setLoading(true);
-    const run = await fetch(`/api/botcommand/bots/${botKey(botInfo)}/start`, {
+    const run = await fetch(`/api/botcommand/bots/${botInfo.id}/start`, {
       'method': 'POST'
     })
     setLoading(false);
@@ -25,11 +24,10 @@ const BotView = ({botInfo}: AppProps) => {
     } else {
       const jsonResponse = await run.json();
       console.log(jsonResponse);
+      // TODO: Redirect to bot status
     }
   }
 
-  // TODO: Add button to start job POST
-  // Redirect to /bots/[botId]/jobs/[jobId]
   return (
     <Layout wrapperClass={`bg-gray-50`}>
       <div className="px-4 py-4">
