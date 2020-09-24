@@ -19,7 +19,7 @@ const Layout = (props) => {
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </Head>
       <ProgressBar />
-      <div className="h-screen flex overflow-hidden bg-white">
+      <div className="h-screen flex bg-white">
         {drawerOpen && (
           <div className="md:hidden">
             <div className="fixed inset-0 z-30 transition-opacity ease-linear duration-300">
@@ -101,7 +101,7 @@ const Layout = (props) => {
           </div>
         </div>
         <div
-          className={`flex flex-col w-0 flex-1 overflow-hidden ${props.wrapperClass}`}
+          className={`flex flex-col w-0 flex-1 ${props.wrapperClass}`}
         >
           <div className="flex items-center md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3">
             <button
