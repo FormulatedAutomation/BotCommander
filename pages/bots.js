@@ -60,7 +60,7 @@ export async function getServerSideProps(context) {
   const session = await getSession(context)
   let summary = null
 
-  const hostname = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+  const hostname = process.env.HOST_URL || 'http://localhost:3000'
   const options = { headers: { cookie: context.req.headers.cookie } }
   const res = await fetch(`${hostname}/api/botcommand/bots`, options)
   summary = await res.json()
