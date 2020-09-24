@@ -6,26 +6,26 @@ export abstract class Bot {
   abstract async info(force?: boolean): Promise<object>
   abstract settings(): object
 
-  static instantiateBot(name: string, bot: BotConfig, sources: object): UiPathBot | RoboCloudBot {
+  static instantiateBot(id: string, bot: BotConfig, sources: object): UiPathBot | RoboCloudBot {
     if (bot.type === 'uipath') {
-      return new UiPathBot(name, bot, sources[bot.source])
+      return new UiPathBot(id, bot, sources[bot.source])
     }
     if (bot.type === 'robocloud')
-      return new RoboCloudBot(name, bot)
+      return new RoboCloudBot(id, bot)
   }
 }
 
 export class UiPathBot extends Bot {
   api: OrchestratorApi
-  botName: string
+  botId: string
   bot: BotConfig
   botInfo: object
   authenticated: boolean
 
-  constructor(botName: string, bot: BotConfig, source: object) {
+  constructor(botId: string, bot: BotConfig, source: object) {
     super()
     this.api = new OrchestratorApi(source)
-    this.botName = botName
+    this.botId = botId
     this.bot = bot
     this.botInfo = null
     this.authenticated = false
@@ -70,7 +70,7 @@ export class UiPathBot extends Bot {
       return this.botInfo
     }
     await this.authenticate()
-    this.botInfo = await this.api.release.findByProcessKey(this.botName)
+    this.botInfo = await this.api.release.findByProcessKey(this.botId)
     this.deserializeArgs()
     return this.botInfo
     // get the processes information and store it on the class instance
@@ -85,12 +85,12 @@ export class UiPathBot extends Bot {
 
 export class RoboCloudBot extends Bot {
   bot: BotConfig
-  botName: string
+  botId: string
   service: RoboCloudAPI
 
-  constructor(botName: string, bot: BotConfig) {
+  constructor(botId: string, bot: BotConfig) {
     super()
-    this.botName = botName
+    this.botId = botId
     this.bot = bot
     this.service = new RoboCloudAPI(process)
   }
