@@ -6,7 +6,7 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse, ctx: Bo
   let bot_list = []
   for (let botId in ctx.bots) {
     const bot = Bot.instantiateBot(botId, ctx.bots[botId], ctx.sources)
-    const botInfo = await bot.toJSON()
+    const botInfo = await bot.definition()
     bot_list.push(botInfo)
   }
   res.json(bot_list)

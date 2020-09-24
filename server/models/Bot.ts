@@ -3,8 +3,8 @@ import { BotConfig } from '../../lib/config'
 import RoboCloudAPI from '../services/robocloud'
 
 export abstract class Bot {
-  abstract async info(force?: boolean): Promise<object>
-  abstract settings(): object
+  abstract async properties(force?: boolean): Promise<object>
+  abstract definition(): object
   botId: string
 
   static instantiateBot(id: string, bot: BotConfig, sources: object): UiPathBot | RoboCloudBot {
@@ -13,15 +13,6 @@ export abstract class Bot {
     }
     if (bot.type === 'robocloud')
       return new RoboCloudBot(id, bot)
-  }
-
-  async toJSON() {
-    const info = await this.info()
-    const settings = this.settings()
-    const json = Object.assign({}, settings)
-    json['id'] = this.botId
-    json['info'] = info
-    return json
   }
 
 }
@@ -39,7 +30,6 @@ export class UiPathBot extends Bot {
     this.bot = bot
     this.botInfo = null
     this.authenticated = false
-    this.settings
   }
 
   async authenticate() {
@@ -51,7 +41,7 @@ export class UiPathBot extends Bot {
 
   async start(inputArgs: object) {
     await this.authenticate()
-    await this.info()
+    await this.properties()
     // _startJobs is private and the only way to start a "JobsCount" strategy
     // @ts-ignore
     return await this.api.job._startJobs({
@@ -75,7 +65,7 @@ export class UiPathBot extends Bot {
     args['Output'] = JSON.parse(args['Output'])
   }
 
-  async info(force?: boolean) {
+  async properties(force?: boolean) {
     if (this.botInfo && !force) {
       return this.botInfo
     }
@@ -86,7 +76,8 @@ export class UiPathBot extends Bot {
     // get the processes information and store it on the class instance
     // Don't refetch unless it's forced
   }
-  settings() {
+
+  definition() {
     return this.bot
   }
 
@@ -107,13 +98,14 @@ export class RoboCloudBot extends Bot {
     return await this.service.start(inputArgs)
   }
 
-  async info(force?: boolean) {
+  async properties(force?: boolean) {
     // Need to get this from the API when it's available
     return {}
   }
 
-  settings() {
+  definition() {
     var clone = Object.assign({}, this.bot);
+    // Drop the secret, this should never be revealed
     delete clone.secret
     return clone
   }

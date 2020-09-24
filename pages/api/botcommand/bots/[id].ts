@@ -1,19 +1,18 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { UiPathBot } from '../../../../server/models/Bot'
+import { Bot } from '../../../../server/models/Bot'
 import { BotCommandContext, ensureLoggedIn } from '../../../../server/middleware/context'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCommandContext) => {
-  const {sources, bots} = context
-  let process = null
-  for (let name in bots) {
-    let bot = bots[name]
-    if (name === req.query.id) {
-      process = new UiPathBot(name, bot, sources[bot.source])
+const handler = async (req: NextApiRequest, res: NextApiResponse, ctx: BotCommandContext) => {
+  let bot = null
+  for (let id in ctx.bots) {
+    if (id === req.query.id) {
+      bot = Bot.instantiateBot(id, ctx.bots[id], ctx.sources)
     }
   }
-  if (process) {
-    await process.info()
-    res.json(process.processInfo)
+  if (bot) {
+    const botInfo = bot.definition()
+    botInfo.properties = await bot.info()
+    res.json(botInfo)
     return
   }
   res.statusCode = 404
