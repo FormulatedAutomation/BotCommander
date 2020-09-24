@@ -1,6 +1,7 @@
 import Layout from '../components/Layout'
 import { getSession } from 'next-auth/client'
 import Link from 'next/link'
+import ProcessGrid from "../components/ProcessGrid";
 
 
 const Processes = ({processes, responseError}) => {
@@ -9,12 +10,7 @@ const Processes = ({processes, responseError}) => {
     <Layout>
       <div className="px-4 py-4">
         <h2 className="text-3xl font-bold">Processes</h2>
-        {!responseError &&
-        <ul>
-          {processes && processes.map((item, i) => <li key={`process-${i}`}>
-            <Link href={`/bots/${item.id}`}>{item.name}</Link>
-            </li>)}
-        </ul>}
+        {!responseError && <ProcessGrid processes={processes} />}
         {responseError && <div>
           <div className="rounded-md bg-red-50 p-4 my-4">
             <div className="flex">

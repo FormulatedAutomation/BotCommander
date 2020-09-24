@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bot-uipath {
+    background: white url('/uipath-logo.png') no-repeat;
+    background-size: cover;
+}
+
+.bot-robocloud {
+    background: black url('/robocorp-logo.png') no-repeat;
+    background-size: cover;
+}
