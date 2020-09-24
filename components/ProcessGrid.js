@@ -24,7 +24,8 @@ const ProcessGrid = ({processes}) => (
             <p className="text-gray-500">{process.description}</p>
           </div>
         </div>
-      </li></Link>))}
+      </li>
+      </Link>))}
     </ul>
   </div>
 )

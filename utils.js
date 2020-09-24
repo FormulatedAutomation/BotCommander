@@ -1,7 +1,8 @@
 export const botKey = (botInfo) => {
+  console.log(botInfo);
   switch (botInfo.type) {
     case 'uipath':
-      return botInfo.properties.Id;
+      return botInfo.name;
     case 'robocloud':
       return botInfo.processId;
     default:

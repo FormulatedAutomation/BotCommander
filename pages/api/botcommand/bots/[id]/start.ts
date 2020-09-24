@@ -25,7 +25,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCo
 function getProcess(name: string, bot: BotConfig, sources: object): UiPathBot | RoboCloudBot {
   if (bot.type === 'uipath') {
    return new UiPathBot(name, bot, sources[bot.source])
-  } 
+  }
   if (bot.type === 'robocloud')
    return new RoboCloudBot(name, bot)
 }

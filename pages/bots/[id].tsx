@@ -5,24 +5,12 @@ import {getSession} from 'next-auth/client'
 import {botKey} from '../../utils';
 import {useState} from 'react';
 import dynamic from 'next/dynamic'
+import ErrorAlert from "../../components/ErrorAlert";
 const DynamicReactJson = dynamic(import('react-json-view'), { ssr: false });
 
 
 const BotView = ({botInfo}: AppProps) => {
-  // const botList = Object.entries(botInfo).map(([key, value], index) => {
-  //   return (
-  //     <dl key={`item-${index}`}>
-  //       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-  //         <dt className="text-sm leading-5 font-medium text-gray-500">
-  //           {key}
-  //         </dt>
-  //         <dd className="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
-  //           {JSON.stringify(value)}
-  //         </dd>
-  //       </div>
-  //     </dl>
-  //   )
-  // })
+
   const [loading, setLoading] = useState(false);
   const [runError, setRunError] = useState(null);
 
@@ -45,6 +33,7 @@ const BotView = ({botInfo}: AppProps) => {
   return (
     <Layout wrapperClass={`bg-gray-50`}>
       <div className="px-4 py-4">
+        {runError && <ErrorAlert message={runError} />}
         <div className="bg-white shadow sm:rounded-lg">
           <div className="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
             <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-no-wrap">
