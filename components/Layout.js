@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import MENU from '../constants/menu';
+import ProgressBar from "./ProgressBar";
 
 
 const Layout = (props) => {
@@ -17,6 +18,7 @@ const Layout = (props) => {
       <Head>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </Head>
+      <ProgressBar />
       <div className="h-screen flex overflow-hidden bg-white">
         {drawerOpen && (
           <div className="md:hidden">

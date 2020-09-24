@@ -1,7 +1,7 @@
 const MENU = [
   {
-    label: "Processes",
-    link: '/dashboard'
+    label: "Bots",
+    link: '/bots'
   },
 ];
 
