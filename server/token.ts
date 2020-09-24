@@ -13,6 +13,5 @@ export interface Token {
 
 export async function getToken (req: NextApiRequest): Promise<Token> {
   const config = await getConfig()
-  console.log(config.secret)
   return <Token> await jwt.getToken({ req, secret: config.secret })
 }

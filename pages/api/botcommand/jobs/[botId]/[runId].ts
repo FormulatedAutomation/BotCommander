@@ -5,7 +5,7 @@ import { BotsConfig } from '../../../../../lib/config'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCommandContext) => {
   const {sources, bots} = context
-  const id: string = Array.isArray(req.query.id) ? req.query.id[0]: req.query.id
+  const id: string = Array.isArray(req.query.runId) ? req.query.runId[0]: req.query.runId
   const botId: string = Array.isArray(req.query.botId) ? req.query.botId[0]: req.query.botId
   const job = getJob(botId, id, bots, sources)
   const info = await job.info()
