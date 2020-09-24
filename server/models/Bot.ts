@@ -2,24 +2,34 @@ import { OrchestratorApi } from 'uipath-orchestrator-api-node'
 import { BotConfig } from '../../lib/config'
 import RoboCloudAPI from '../services/robocloud'
 
-export class Bot {
+export abstract class Bot {
+  abstract async info(force?: boolean): Promise<object>
+  abstract settings(): object
 
+  static instantiateBot(name: string, bot: BotConfig, sources: object): UiPathBot | RoboCloudBot {
+    if (bot.type === 'uipath') {
+      return new UiPathBot(name, bot, sources[bot.source])
+    }
+    if (bot.type === 'robocloud')
+      return new RoboCloudBot(name, bot)
+  }
 }
 
 export class UiPathBot extends Bot {
   api: OrchestratorApi
-  processName: string
-  process: object
-  processInfo: object
+  botName: string
+  bot: BotConfig
+  botInfo: object
   authenticated: boolean
 
-  constructor(processName: string, process: object, source: object) {
+  constructor(botName: string, bot: BotConfig, source: object) {
     super()
     this.api = new OrchestratorApi(source)
-    this.processName = processName
-    this.process = process
-    this.processInfo = null
+    this.botName = botName
+    this.bot = bot
+    this.botInfo = null
     this.authenticated = false
+    this.settings
   }
 
   async authenticate() {
@@ -36,7 +46,7 @@ export class UiPathBot extends Bot {
     // @ts-ignore
     return await this.api.job._startJobs({
         startInfo: {
-          ReleaseKey: this.processInfo['Key'],
+          ReleaseKey: this.botInfo['Key'],
           RobotIds: [],
           JobsCount: 1,
           Strategy: 'JobsCount',
@@ -47,25 +57,29 @@ export class UiPathBot extends Bot {
 
   // Inplace deserialization
   deserializeArgs(): void {
-    if (!this.processInfo) {
+    if (!this.botInfo) {
       throw "Must first fetch process info"
     }
-    const args = this.processInfo['Arguments']
+    const args = this.botInfo['Arguments']
     args['Input'] = JSON.parse(args['Input'])
     args['Output'] = JSON.parse(args['Output'])
   }
 
   async info(force?: boolean) {
-    if (this.processInfo && !force) {
-      return this.processInfo
+    if (this.botInfo && !force) {
+      return this.botInfo
     }
     await this.authenticate()
-    this.processInfo = await this.api.release.findByProcessKey(this.processName)
+    this.botInfo = await this.api.release.findByProcessKey(this.botName)
     this.deserializeArgs()
-    return this.processInfo
+    return this.botInfo
     // get the processes information and store it on the class instance
     // Don't refetch unless it's forced
   }
+  settings() {
+    return this.bot
+  }
+
 
 }
 
@@ -83,6 +97,17 @@ export class RoboCloudBot extends Bot {
 
   async start(inputArgs: object) {
     return await this.service.start(inputArgs)
+  }
+
+  async info(force?: boolean) {
+    // Need to get this from the API when it's available
+    return {}
+  }
+
+  settings() {
+    var clone = Object.assign({}, this.bot);
+    delete clone.secret
+    return clone
   }
 
 }
