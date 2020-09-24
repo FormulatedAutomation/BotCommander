@@ -68,6 +68,16 @@ const BotView = ({botInfo}: AppProps) => {
             <dl>
               <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                 <dt className="text-sm leading-5 font-medium text-gray-500">
+                  ID
+                </dt>
+                <dd className="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+                  {botInfo.id}
+                </dd>
+              </div>
+            </dl>
+            <dl>
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                <dt className="text-sm leading-5 font-medium text-gray-500">
                   Name
                 </dt>
                 <dd className="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
