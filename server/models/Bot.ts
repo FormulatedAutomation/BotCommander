@@ -5,6 +5,7 @@ import RoboCloudAPI from '../services/robocloud'
 export abstract class Bot {
   abstract async info(force?: boolean): Promise<object>
   abstract settings(): object
+  botId: string
 
   static instantiateBot(id: string, bot: BotConfig, sources: object): UiPathBot | RoboCloudBot {
     if (bot.type === 'uipath') {
@@ -13,11 +14,20 @@ export abstract class Bot {
     if (bot.type === 'robocloud')
       return new RoboCloudBot(id, bot)
   }
+
+  async toJSON() {
+    const info = await this.info()
+    const settings = this.settings()
+    const json = Object.assign({}, settings)
+    json['id'] = this.botId
+    json['info'] = info
+    return json
+  }
+
 }
 
 export class UiPathBot extends Bot {
   api: OrchestratorApi
-  botId: string
   bot: BotConfig
   botInfo: object
   authenticated: boolean
@@ -80,12 +90,10 @@ export class UiPathBot extends Bot {
     return this.bot
   }
 
-
 }
 
 export class RoboCloudBot extends Bot {
   bot: BotConfig
-  botId: string
   service: RoboCloudAPI
 
   constructor(botId: string, bot: BotConfig) {
