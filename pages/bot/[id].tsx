@@ -1,7 +1,6 @@
 import Layout from '../../components/Layout'
 import {AppProps} from 'next/dist/next-server/lib/router/router'
 import {GetServerSideProps, GetServerSidePropsContext, NextPageContext} from 'next'
-import {getSession} from 'next-auth/client'
 import {useState} from 'react';
 import dynamic from 'next/dynamic'
 import ErrorAlert from "../../components/ErrorAlert";
