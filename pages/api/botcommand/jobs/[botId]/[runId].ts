@@ -7,8 +7,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCo
   const {sources, bots} = context
   const id: string = Array.isArray(req.query.runId) ? req.query.runId[0]: req.query.runId
   const botId: string = Array.isArray(req.query.botId) ? req.query.botId[0]: req.query.botId
+  console.log(id, botId)
   const job = getJob(botId, id, bots, sources)
-  const info = await job.info()
+  const info = await job.properties()
   res.statusCode = 200
   res.json(info)
 }

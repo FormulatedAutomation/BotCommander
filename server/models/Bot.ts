@@ -91,7 +91,7 @@ export class RoboCloudBot extends Bot {
     super()
     this.botId = botId
     this.bot = bot
-    this.service = new RoboCloudAPI(process)
+    this.service = new RoboCloudAPI(bot)
   }
 
   async start(inputArgs: object) {

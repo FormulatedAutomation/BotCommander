@@ -29,7 +29,7 @@ export const bots =
     name: "ATL Code Scraper",
     description: "Scrape ATL Code Violations",
     secret: "36713df0406fc23629cee8f324a7323b",
-    workSpaceId: "971988d2-33d9-4cdf-acd4-2d7f7b64814e",
+    workspaceId: "971988d2-33d9-4cdf-acd4-2d7f7b64814e",
     processId: "0acf110e-5160-43f4-a82c-9c1b5a2472dc",
     type: 'robocloud',
     acl: {

@@ -2,8 +2,14 @@ import { OrchestratorApi } from 'uipath-orchestrator-api-node'
 import { BotConfig } from '../../lib/config'
 import RoboCloudAPI from '../services/robocloud'
 
-export class Job {
+export enum JobState {
+  Complete,
+  Pending,
+  Failed,
+}
 
+
+export class Job {
 }
 
 export class UiPathJob extends Job {
@@ -35,7 +41,19 @@ export class UiPathJob extends Job {
     this.jobInfo['OutputArguments'] = JSON.parse(this.jobInfo['OutputArguments'])
   }
 
-  async info(force?: boolean) {
+  // Normalize the states
+  state(state: string): JobState {
+    if (state === 'Successful') {
+      return JobState.Complete
+    } else if (state === 'Pending') {
+      return JobState.Pending
+    }
+    return JobState.Failed
+  }
+
+  async properties(force?: boolean) {
+    // get the processes information and store it on the class instance
+    // Don't refetch unless it's forced
     if (this.jobInfo && !force) {
       return this.jobInfo
     }
@@ -43,9 +61,11 @@ export class UiPathJob extends Job {
     this.jobInfo = await this.api.job.find(this.jobKey)
     console.log(this.jobInfo)
     this.deserializeArgs()
-    return this.jobInfo
-    // get the processes information and store it on the class instance
-    // Don't refetch unless it's forced
+    return  {
+      id: this.jobKey,
+      state: JobState[this.state(this.jobInfo['State'])],
+      info: this.jobInfo
+    }
   }
 
 
@@ -55,20 +75,46 @@ export class UiPathJob extends Job {
 export class RoboCloudJob extends Job {
 
   bot: BotConfig
-  processName: string
+  botName: string
   service: RoboCloudAPI
   runId: string
 
-  constructor(processName: string, bot: BotConfig, runId: string) {
+  constructor(botName: string, bot: BotConfig, runId: string) {
     super()
-    this.processName = processName
+    this.botName = botName
     this.bot = bot
-    this.service = new RoboCloudAPI(process)
+    this.service = new RoboCloudAPI(bot)
     this.runId = runId
   }
 
-  async info() {
-    return await this.service.status(this.runId)
+  // Normalize the states
+  state(state: string): JobState {
+    if (state === 'COMPL') {
+      return JobState.Complete
+    } else if (state === 'PEND') {
+      return JobState.Pending
+    }
+    return JobState.Failed
+  }
+
+  async properties() {
+    const status = await this.service.status(this.runId)
+    const state = this.state(status['state'])
+    let artifacts = []
+    if (state === JobState.Complete) {
+      console.log("Completed")
+      artifacts = await this.artifacts(status['robotRuns'][0]['id'])
+    }
+    return {
+      id: this.runId,
+      state: JobState[state],
+      properties: status,
+      artifacts,
+    }
+  }
+
+  async artifacts(robotRunId: string): Promise<any[]> {
+    return await this.service.artifacts(this.runId, robotRunId)
   }
 
 }
