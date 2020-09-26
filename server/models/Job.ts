@@ -1,3 +1,4 @@
+import { Response } from 'node-fetch'
 import { OrchestratorApi } from 'uipath-orchestrator-api-node'
 import { BotConfig } from '../../lib/config'
 import RoboCloudAPI from '../services/robocloud'
@@ -115,6 +116,10 @@ export class RoboCloudJob extends Job {
 
   async artifacts(robotRunId: string): Promise<any[]> {
     return await this.service.artifacts(this.runId, robotRunId)
+  }
+
+  async getArtifact(robotRunId: string, artifactId: string, filename:string): Promise<Response> {
+    return await this.service.getArtifact(this.runId, robotRunId, artifactId, filename)
   }
 
 }

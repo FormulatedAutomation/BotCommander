@@ -61,5 +61,21 @@ export default class RoboCloudAPI {
     return await result.json()
   }
 
+  async getArtifact(runId: string, robotRunId: string, artifactId: string, filename: string) {
+    const options = {
+      method: 'GET',
+      headers: {
+        'robocloud-process-secret': this.secret,
+      },
+    }
+    console.log(
+      `https://api.eu1.robocloud.eu/workspace-v1/workspaces/${this.workspaceId}/processes/${this.processId}/runs/${runId}/robotRuns/${robotRunId}/artifacts/${artifactId}/${filename}`
+    )
+    return await fetch(
+      `https://api.eu1.robocloud.eu/workspace-v1/workspaces/${this.workspaceId}/processes/${this.processId}/runs/${runId}/robotRuns/${robotRunId}/artifacts/${artifactId}/${filename}`,
+      options
+    )
+  }
+
 
 }
