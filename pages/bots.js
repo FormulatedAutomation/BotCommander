@@ -1,6 +1,5 @@
 import Layout from '../components/Layout'
 import { getSession } from 'next-auth/client'
-import Link from 'next/link'
 import ProcessGrid from "../components/ProcessGrid";
 import ErrorAlert from "../components/ErrorAlert";
 

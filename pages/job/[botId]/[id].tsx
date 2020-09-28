@@ -3,11 +3,10 @@ import {GetServerSideProps, GetServerSidePropsContext, NextPageContext} from 'ne
 import {useState} from 'react';
 import dynamic from 'next/dynamic'
 import Layout from '../../../components/Layout'
-import ErrorAlert from "../../../components/ErrorAlert";
 const DynamicReactJson = dynamic(import('react-json-view'), { ssr: false });
+import Link from 'next/link';
 
-
-const BotView = ({jobInfo}: AppProps) => {
+const BotView = ({jobInfo, botInfo}: AppProps) => {
 
   const [loading, setLoading] = useState(false);
 
@@ -19,13 +18,14 @@ const BotView = ({jobInfo}: AppProps) => {
             <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-no-wrap">
               <div className="ml-4 mt-2">
                 <h3 className="text-lg leading-6 font-medium text-gray-900">
-                  {jobInfo.Id}
+                  <Link href={`/bot/${botInfo.id}`}><a className="underline">{botInfo.name}</a></Link>
+                  <span className="ml-2">Run #{jobInfo.id}</span>
                 </h3>
               </div>
-              <div className="ml-4 mt-2 flex-shrink-0">
-              <span className="inline-flex rounded-md shadow-sm">
+              <span
+                className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-orange-100 text-orange-800">
+                  State
               </span>
-              </div>
             </div>
           </div>
           <div className="px-4 py-5 sm:p-0">
@@ -51,16 +51,18 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   // const session = await getSession(ctx)
   // console.log(session)
   const query = ctx.query
-  let jobInfo = null
   const {botId, id} = query
   const hostname = process.env.HOST_URL || 'http://localhost:3000'
   const options = {headers: {cookie: ctx.req.headers.cookie}}
   const res = await fetch(`${hostname}/api/botcommand/jobs/${botId}/${id}`, options)
-  jobInfo = await res.json()
+  const botRes = await fetch(`${hostname}/api/botcommand/bots/${botId}`, options)
+  const botInfo = await botRes.json()
+  const jobInfo = await res.json()
   console.log(jobInfo)
   return {
     props: {
-      jobInfo
+      jobInfo,
+      botInfo
     }
   }
 }
