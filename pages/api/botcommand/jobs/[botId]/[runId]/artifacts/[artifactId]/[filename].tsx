@@ -12,10 +12,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCo
 
   const job = new RoboCloudJob(botId, bots[botId], id)
   const response = await job.getArtifact(runId, artifactId, filename)
-  res.setHeader('content-type', response.headers.get('content-type'))
-  res.setHeader('content-length', response.headers.get('content-length'))
-  response.body.pipe(res)
-  res.on('close', ()=>(res.end()))
+  if (response.status === 200) {
+    res.setHeader('content-type', response.headers.get('content-type'))
+    res.setHeader('content-length', response.headers.get('content-length'))
+    response.body.pipe(res)
+    res.on('close', ()=>(res.end()))
+    res.on('error', ()=>(res.end()))
+  } else {
+    res.status(500)
+    res.json({Error: 'Unable to download artifact'})
+  }
 }
 
 export default ensureLoggedIn(handler)
