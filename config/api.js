@@ -2,13 +2,13 @@ export const acl = {
   groups: {
     admins: {
       emails: [
-        'percival@gmail.com',
+        'm@mdp.im',
         'brent@brentsanders.io',
       ]
     },
     users: {
       emails: [
-        '/^[A-Z0-9._-+%]+@formulatedautomation.com$/i',
+        '/^[A-Z0-9._\\-+\\%]+@formulatedautomation.com$/i',
       ]
     }
   }
