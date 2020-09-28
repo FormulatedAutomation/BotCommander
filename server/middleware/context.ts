@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next'
 import {BotsConfig, get as getConfig} from '../../lib/config'
+import logger from '../../lib/logging'
 
 import {getToken, Token} from '../token'
 
@@ -41,8 +42,10 @@ export function ensureLoggedIn(handler: (req: NextApiRequest, res: NextApiRespon
           if (!ctx.token) {
             res.statusCode = 401
             res.json({ Error: "Must Be Authenticated" })
+            logger.info("Authenticated Request Failed", {})
             return null
           }
+          logger.info("Authenticated Request", {user: ctx.token, path: req.url})
           return handler(req, res, ctx)
         })
         .catch((e) => reject(e))
