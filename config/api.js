@@ -8,7 +8,7 @@ export const acl = {
     },
     users: {
       emails: [
-        '*@formulatedautomation.com',
+        '/^[A-Z0-9._-+%]+@formulatedautomation.com$/i',
       ]
     }
   }

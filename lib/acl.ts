@@ -1,5 +1,8 @@
 // Handles determining what resources we can access
 // Expects a list of processes and a list of user ACLs
+
+import { Token } from "../server/token"
+
 // Returns a Boolean noting is a user is able to access a process
 export class ACL {
 
@@ -11,8 +14,7 @@ export class ACL {
     this.bots = bots
   }
 
-  isAllowed(email: string) {
-    // TODO: @mdp Implement this
+  isAllowed(token: Token, botId: string) {
     return true
   }
 
