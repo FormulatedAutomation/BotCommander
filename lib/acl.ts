@@ -51,8 +51,8 @@ export class ACL {
 
   // Returns a Boolean noting is a user is able to access a process
   isAllowed(token: Token, botId: string): boolean {
-    const bot = this.bots[botId]
-    const botAclGroups = bot.acl.groups
+    const bot = this.bots.find((b) => botId === b.id)
+    const botAclGroups = bot.botConfig['acl']['groups']
     for (let group of botAclGroups) {
       let acl = this.acl['groups'][group]
       for (let email of acl.emails) {

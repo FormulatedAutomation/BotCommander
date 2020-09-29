@@ -1,6 +1,8 @@
-import { OrchestratorApi } from 'uipath-orchestrator-api-node'
 import { BotConfig } from '../../lib/config'
+import logger from '../../lib/logging'
+
 import RoboCloudAPI from '../services/robocloud'
+import UiPathAPI from '../services/uipath'
 import { Job, RoboCloudJob, UiPathJob } from './Job'
 
 export interface JobStartResponse {
@@ -15,7 +17,7 @@ export abstract class Bot {
   id: string
   botConfig: BotConfig
 
-  static instantiateBot(bot: BotConfig, sources: object): UiPathBot | RoboCloudBot {
+  static createFromConfig(bot: BotConfig, sources: object): UiPathBot | RoboCloudBot {
     if (bot.type === 'uipath') {
       return new UiPathBot(bot, sources[bot.source])
     }
@@ -26,32 +28,28 @@ export abstract class Bot {
 }
 
 export class UiPathBot extends Bot {
-  api: OrchestratorApi
+  api: UiPathAPI
   botInfo: object
   authenticated: boolean
 
   constructor(botConfig: BotConfig, source: object) {
     super()
-    this.api = new OrchestratorApi(source)
+    if (!source.hasOwnProperty('clientId')) {
+      logger.error("UiPath bot must have a valid credentials")
+    }
+    this.api = new UiPathAPI(source)
     this.id = botConfig.id
     this.botConfig = botConfig
     this.botInfo = null
     this.authenticated = false
   }
 
-  async authenticate() {
-    if (!this.authenticated) {
-      await this.api.authenticate()
-      this.authenticated = true
-    }
-  }
 
   async start(inputArgs: object): Promise<JobStartResponse> {
-    await this.authenticate()
     await this.properties()
     // _startJobs is private and the only way to start a "JobsCount" strategy
     // @ts-ignore
-    const _result = await this.api.job._startJobs({
+    const _result = await this.api.start({
         startInfo: {
           ReleaseKey: this.botInfo['Key'],
           RobotIds: [],
@@ -61,7 +59,7 @@ export class UiPathBot extends Bot {
         }
       })
     return {
-      runId: _result.value[0].Id,
+      runId: _result['value'][0].Id,
       _result,
     }
   }
@@ -80,8 +78,7 @@ export class UiPathBot extends Bot {
     if (this.botInfo && !force) {
       return this.botInfo
     }
-    await this.authenticate()
-    this.botInfo = await this.api.release.findByProcessKey(this.id)
+    this.botInfo = await this.api.findByProcessKey(this.id)
     this.deserializeArgs()
     return this.botInfo
     // get the processes information and store it on the class instance

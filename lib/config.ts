@@ -28,7 +28,7 @@ let cached: boolean | Config = false
 
 export async function get(): Promise<Config> {
   // Allow for async setup later on if needed
-  const botInstances = bots.map((bot) => Bot.instantiateBot(bot, sources))
+  const botInstances = bots.map((bot) => Bot.createFromConfig(bot, sources))
   if (!cached) {
     cached = {
       secret: await getSecret(),

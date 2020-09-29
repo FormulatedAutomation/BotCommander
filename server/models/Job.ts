@@ -1,7 +1,6 @@
 import { Response } from 'node-fetch'
-import { OrchestratorApi } from 'uipath-orchestrator-api-node'
-import { BotConfig } from '../../lib/config'
 import RoboCloudAPI from '../services/robocloud'
+import UiPathAPI from '../services/uipath'
 import { Bot } from './Bot'
 
 export enum JobState {
@@ -16,23 +15,16 @@ export abstract class Job {
 }
 
 export class UiPathJob extends Job {
-  api: OrchestratorApi
+  api: UiPathAPI
   jobKey: string
   authenticated: boolean
   jobInfo: object
 
-  constructor(jobKey: string, api: OrchestratorApi) {
+  constructor(jobKey: string, api: UiPathAPI) {
     super()
     this.api = api
     this.jobKey = jobKey
     this.authenticated = false
-  }
-
-  async authenticate() {
-    if (!this.authenticated) {
-      await this.api.authenticate()
-      this.authenticated = true
-    }
   }
 
   // Inplace deserialization
@@ -60,9 +52,7 @@ export class UiPathJob extends Job {
     if (this.jobInfo && !force) {
       return this.jobInfo
     }
-    await this.authenticate()
-    this.jobInfo = await this.api.job.find(this.jobKey)
-    console.log(this.jobInfo)
+    this.jobInfo = await this.api.status(this.jobKey)
     this.deserializeArgs()
     return  {
       id: this.jobKey,
@@ -107,7 +97,6 @@ export class RoboCloudJob extends Job {
     const state = this.state(status['state'])
     let artifacts = []
     if (state === JobState.Complete) {
-      console.log("Completed")
       artifacts = await this.artifacts(status['robotRuns'][0]['id'])
     }
     return {
