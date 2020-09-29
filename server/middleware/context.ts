@@ -1,13 +1,14 @@
 import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next'
-import {BotsConfig, get as getConfig} from '../../lib/config'
+import { ACL } from '../../lib/acl'
+import {get as getConfig} from '../../lib/config'
 import logger from '../../lib/logging'
+import { Bot } from '../models/Bot'
 
 import {getToken, Token} from '../token'
 
 export interface BotCommandContext {
-  bots: BotsConfig
-  acl: object
-  sources: object
+  bots: Bot[]
+  acl: ACL
   token: Token
 }
 
@@ -16,8 +17,7 @@ async function getContext(req: NextApiRequest): Promise<BotCommandContext> {
   const config = await getConfig()
   return {
     acl: config.acl,
-    bots: config.bots,
-    sources: config.sources,
+    bots: config.acl.listBots(token),
     token: token,
   }
 }

@@ -22,7 +22,6 @@ const BotView = ({botInfo}: AppProps) => {
       setRunError('Error starting that process');
     } else {
       const jsonResponse = await run.json();
-      console.log(jsonResponse);
       // TODO: Redirect to bot status
     }
   }
@@ -141,7 +140,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   const options = {headers: {cookie: ctx.req.headers.cookie}}
   const res = await fetch(`${hostname}/api/botcommand/bots/${id}`, options)
   botInfo = await res.json()
-  console.log(botInfo)
   return {
     props: {
       botInfo

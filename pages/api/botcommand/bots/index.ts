@@ -1,16 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Bot, UiPathBot, RoboCloudBot } from '../../../../server/models/Bot'
 import { BotCommandContext, ensureLoggedIn } from '../../../../server/middleware/context'
+import { ACL } from '../../../../lib/acl'
 
 export const handler = async (req: NextApiRequest, res: NextApiResponse, ctx: BotCommandContext) => {
-  let bot_list = []
-  for (let botId in ctx.bots) {
-    const bot = Bot.instantiateBot(botId, ctx.bots[botId], ctx.sources)
-    const botInfo = await bot.definition()
-    botInfo.id = botId
-    bot_list.push(botInfo)
-  }
-  res.json(bot_list)
+  res.json(ctx.bots.map((bot) => bot.definition()))
 }
 
 export default ensureLoggedIn(handler)
