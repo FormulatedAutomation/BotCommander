@@ -23,18 +23,8 @@ const BotView = ({botInfo}: AppProps) => {
       setRunError('Error starting that process');
     } else {
       const jsonResponse = await run.json();
-      // TODO: Figure out a better way to deal with responses
-      if (jsonResponse.hasOwnProperty('processRunId')) {
-        const { processRunId } = jsonResponse;
-        Router.push(`/job/${botInfo.id}/${processRunId}`)
-      }
-      if (jsonResponse.hasOwnProperty('@odata.context')) {
-        const processId = jsonResponse.value[0].Id;
-        Router.push(`/job/${botInfo.id}/${processId}`)
-      }
-      // TODO: Redirect to bot status
-      // ROBO: {message: "OK", processRunId: "c3bbe96b-f1ad-4787-8e79-13f2c52e319d", processId: "0acf110e-5160-43f4-a82c-9c1b5a2472dc", workspaceId: "971988d2-33d9-4cdf-acd4-2d7f7b64814e", workItemId: "80cdb54a-ec48-4f35-8013-4bd2541a0427"}
-      // UIPATH: value[0].Key
+      console.log(jsonResponse)
+      Router.push(`/job/${botInfo.id}/${jsonResponse.runId}`)
     }
   }
 

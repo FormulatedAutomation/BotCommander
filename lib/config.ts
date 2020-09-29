@@ -10,6 +10,11 @@ export interface BotConfig {
   id: string
   type: string
   source?: string
+  
+  // Speficic to Robocloud
+  workspaceId?: string
+  processId?: string
+  secret?: string
   [x: string]: any 
 }
 

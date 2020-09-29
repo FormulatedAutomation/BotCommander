@@ -2,6 +2,7 @@ import { Response } from 'node-fetch'
 import { OrchestratorApi } from 'uipath-orchestrator-api-node'
 import { BotConfig } from '../../lib/config'
 import RoboCloudAPI from '../services/robocloud'
+import { Bot } from './Bot'
 
 export enum JobState {
   Complete,
@@ -10,7 +11,8 @@ export enum JobState {
 }
 
 
-export class Job {
+export abstract class Job {
+  abstract async properties(): Promise<object>
 }
 
 export class UiPathJob extends Job {
@@ -19,9 +21,9 @@ export class UiPathJob extends Job {
   authenticated: boolean
   jobInfo: object
 
-  constructor(jobKey: string, source: object) {
+  constructor(jobKey: string, api: OrchestratorApi) {
     super()
-    this.api = new OrchestratorApi(source)
+    this.api = api
     this.jobKey = jobKey
     this.authenticated = false
   }
@@ -75,14 +77,12 @@ export class UiPathJob extends Job {
 
 export class RoboCloudJob extends Job {
 
-  bot: BotConfig
-  botName: string
+  bot: Bot
   service: RoboCloudAPI
   runId: string
 
-  constructor(botName: string, bot: BotConfig, runId: string) {
+  constructor(runId: string, bot: Bot) {
     super()
-    this.botName = botName
     this.bot = bot
     this.service = new RoboCloudAPI(bot)
     this.runId = runId
@@ -93,6 +93,10 @@ export class RoboCloudJob extends Job {
     if (state === 'COMPL') {
       return JobState.Complete
     } else if (state === 'PEND') {
+      return JobState.Pending
+    } else if (state === 'IP') {
+      return JobState.Pending
+    } else if (state === 'IND') {
       return JobState.Pending
     }
     return JobState.Failed

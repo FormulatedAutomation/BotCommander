@@ -1,19 +1,18 @@
 import fetch from 'node-fetch'
+import { Bot } from '../models/Bot'
 
 export default class RoboCloudAPI {
   secret: string
   workspaceId: string
   processId: string
 
-  constructor(opts: object) {
-    this.secret = opts['secret']
-    this.workspaceId = opts['workspaceId']
-    this.processId = opts['processId']
+  constructor(bot: Bot) {
+    this.secret = bot.botConfig.secret
+    this.workspaceId = bot.botConfig.workspaceId
+    this.processId = bot.botConfig.processId
   }
 
   async start(args: object) {
-    console.log(args)
-    console.log(this.secret, this.workspaceId)
     const options = {
       method: 'POST',
       body: JSON.stringify(args || {}),

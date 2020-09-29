@@ -4,15 +4,15 @@ import { BotCommandContext, ensureLoggedIn } from '../../../../../server/middlew
 import { BotConfig } from '../../../../../lib/config'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCommandContext) => {
-  const {sources, bots} = context
+  const { bots} = context
   if (req.method === 'POST') {
-    let process = null
-    for (let name in bots) {
-      if (name === req.query.id) {
-        process = getProcess(name, bots[name], sources)
+    let bot = null
+    for (let b of bots) {
+      if (b.id === req.query.id) {
+        bot = b
       }
     }
-    const result = await process.start(req.body)
+    const result = await bot.start(req.body)
     res.statusCode = 200
     res.json(result)
   } else {
@@ -20,14 +20,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCo
       res.json({ Error: "Not Found" })
       return
   }
-}
-
-function getProcess(name: string, bot: BotConfig, sources: object): UiPathBot | RoboCloudBot {
-  if (bot.type === 'uipath') {
-   return new UiPathBot(name, bot, sources[bot.source])
-  }
-  if (bot.type === 'robocloud')
-   return new RoboCloudBot(name, bot)
 }
 
 export default ensureLoggedIn(handler)

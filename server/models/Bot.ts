@@ -1,10 +1,17 @@
 import { OrchestratorApi } from 'uipath-orchestrator-api-node'
 import { BotConfig } from '../../lib/config'
 import RoboCloudAPI from '../services/robocloud'
+import { Job, RoboCloudJob, UiPathJob } from './Job'
+
+export interface JobStartResponse {
+  runId: string
+  _result: any
+}
 
 export abstract class Bot {
   abstract async properties(force?: boolean): Promise<object>
   abstract definition(): object
+  abstract getJob(jobId: string): Job
   id: string
   botConfig: BotConfig
 
@@ -39,12 +46,12 @@ export class UiPathBot extends Bot {
     }
   }
 
-  async start(inputArgs: object) {
+  async start(inputArgs: object): Promise<JobStartResponse> {
     await this.authenticate()
     await this.properties()
     // _startJobs is private and the only way to start a "JobsCount" strategy
     // @ts-ignore
-    return await this.api.job._startJobs({
+    const _result = await this.api.job._startJobs({
         startInfo: {
           ReleaseKey: this.botInfo['Key'],
           RobotIds: [],
@@ -53,6 +60,10 @@ export class UiPathBot extends Bot {
           InputArguments: JSON.stringify(inputArgs),
         }
       })
+    return {
+      runId: _result.value[0].Id,
+      _result,
+    }
   }
 
   // Inplace deserialization
@@ -81,20 +92,28 @@ export class UiPathBot extends Bot {
     return this.botConfig
   }
 
+  getJob(jobId: string): UiPathJob {
+    return new UiPathJob(jobId, this.api)
+  }
+
 }
 
 export class RoboCloudBot extends Bot {
-  service: RoboCloudAPI
+  api: RoboCloudAPI
 
   constructor(botConfig: BotConfig) {
     super()
     this.id = botConfig.id
     this.botConfig = botConfig
-    this.service = new RoboCloudAPI(botConfig)
+    this.api = new RoboCloudAPI(this)
   }
 
-  async start(inputArgs: object) {
-    return await this.service.start(inputArgs)
+  async start(inputArgs: object): Promise<JobStartResponse> {
+    const _result = await this.api.start(inputArgs)
+    return {
+      runId: _result.processRunId,
+      _result
+    }
   }
 
   async properties(force?: boolean) {
@@ -107,6 +126,10 @@ export class RoboCloudBot extends Bot {
     // Drop the secret, this should never be revealed
     delete clone.secret
     return clone
+  }
+
+  getJob(jobId: string): RoboCloudJob {
+    return new RoboCloudJob(jobId, this)
   }
 
 }
