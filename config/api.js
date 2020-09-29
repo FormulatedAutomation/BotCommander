@@ -3,6 +3,7 @@ export const acl = {
     admins: {
       emails: [
         'm@mdp.im',
+        'percival@gmail.com',
         'brent@brentsanders.io',
       ]
     },
@@ -15,8 +16,9 @@ export const acl = {
 }
 
 export const bots = 
-{
-  'Turkish.Lira.to.USD': {
+[
+  {
+    id: 'Turkish.Lira.to.USD',
     name: "Turkish Lira Conversion Bot",
     description: "Converts Turkish Lira to USD",
     source: 'uipath',
@@ -25,7 +27,8 @@ export const bots =
       groups: ['admins', 'users']
     },
   },
-  'Robocloud.Demo': {
+  {
+    id: 'Robocloud.Demo',
     name: "ATL Code Scraper",
     description: "Scrape ATL Code Violations",
     secret: "36713df0406fc23629cee8f324a7323b",
@@ -36,7 +39,7 @@ export const bots =
       groups: ['admins', 'users']
     },
   },
-}
+]
 
 export const sources = 
 {

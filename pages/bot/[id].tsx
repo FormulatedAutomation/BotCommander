@@ -152,7 +152,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   const options = {headers: {cookie: ctx.req.headers.cookie}}
   const res = await fetch(`${hostname}/api/botcommand/bots/${id}`, options)
   botInfo = await res.json()
-  console.log(botInfo)
   return {
     props: {
       botInfo

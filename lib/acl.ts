@@ -1,3 +1,4 @@
+import { Bot } from "../server/models/Bot"
 // Handles determining what resources we can access
 // Expects a list of processes and a list of user ACLs
 
@@ -19,12 +20,33 @@ function regexify(str: string) {
 export class ACL {
 
   acl: object
-  _acl: object
-  bots: object
+  bots: Bot[]
 
-  constructor(acl, bots) {
+  constructor(acl: object, bots: Bot[]) {
     this.acl = acl
     this.bots = bots
+  }
+
+  // Get back a list of bots that a user is allowed to use
+  listBots(token: Token): Bot[] {
+    const allowedBots = []
+    for (let bot of this.bots) {
+      let botAclGroups = bot.botConfig['acl']['groups']
+      let botAllowed = false
+      for (let group of botAclGroups) {
+        let acl = this.acl['groups'][group]
+        for (let email of acl.emails) {
+          let regex = regexify(email)
+          if (regex.test(token.email)) {
+            allowedBots.push(bot)
+            botAllowed = true
+            break
+          }
+        }
+        if (botAllowed) { break }
+      }
+    }
+    return allowedBots
   }
 
   // Returns a Boolean noting is a user is able to access a process

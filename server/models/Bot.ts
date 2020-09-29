@@ -5,29 +5,29 @@ import RoboCloudAPI from '../services/robocloud'
 export abstract class Bot {
   abstract async properties(force?: boolean): Promise<object>
   abstract definition(): object
-  botId: string
+  id: string
+  botConfig: BotConfig
 
-  static instantiateBot(id: string, bot: BotConfig, sources: object): UiPathBot | RoboCloudBot {
+  static instantiateBot(bot: BotConfig, sources: object): UiPathBot | RoboCloudBot {
     if (bot.type === 'uipath') {
-      return new UiPathBot(id, bot, sources[bot.source])
+      return new UiPathBot(bot, sources[bot.source])
     }
     if (bot.type === 'robocloud')
-      return new RoboCloudBot(id, bot)
+      return new RoboCloudBot(bot)
   }
 
 }
 
 export class UiPathBot extends Bot {
   api: OrchestratorApi
-  bot: BotConfig
   botInfo: object
   authenticated: boolean
 
-  constructor(botId: string, bot: BotConfig, source: object) {
+  constructor(botConfig: BotConfig, source: object) {
     super()
     this.api = new OrchestratorApi(source)
-    this.botId = botId
-    this.bot = bot
+    this.id = botConfig.id
+    this.botConfig = botConfig
     this.botInfo = null
     this.authenticated = false
   }
@@ -70,28 +70,27 @@ export class UiPathBot extends Bot {
       return this.botInfo
     }
     await this.authenticate()
-    this.botInfo = await this.api.release.findByProcessKey(this.botId)
+    this.botInfo = await this.api.release.findByProcessKey(this.id)
     this.deserializeArgs()
     return this.botInfo
     // get the processes information and store it on the class instance
     // Don't refetch unless it's forced
   }
 
-  definition() {
-    return this.bot
+  definition(): BotConfig {
+    return this.botConfig
   }
 
 }
 
 export class RoboCloudBot extends Bot {
-  bot: BotConfig
   service: RoboCloudAPI
 
-  constructor(botId: string, bot: BotConfig) {
+  constructor(botConfig: BotConfig) {
     super()
-    this.botId = botId
-    this.bot = bot
-    this.service = new RoboCloudAPI(bot)
+    this.id = botConfig.id
+    this.botConfig = botConfig
+    this.service = new RoboCloudAPI(botConfig)
   }
 
   async start(inputArgs: object) {
@@ -104,7 +103,7 @@ export class RoboCloudBot extends Bot {
   }
 
   definition() {
-    var clone = Object.assign({}, this.bot);
+    var clone = Object.assign({}, this.botConfig);
     // Drop the secret, this should never be revealed
     delete clone.secret
     return clone
