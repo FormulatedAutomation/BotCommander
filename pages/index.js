@@ -1,17 +1,19 @@
 import styles from '../styles/Home.module.css'
-import Layout from "../components/Layout";
 import React, {useEffect} from 'react'
 import Router from 'next/router';
-import {getCsrfToken, getSession, signIn, useSession} from 'next-auth/client'
+import { useSession } from 'next-auth/client'
 import PublicLayout from "../components/PublicLayout";
 
-export default function Page({csrfToken}) {
+export default function Page({}) {
   const [session, loading] = useSession()
 
   useEffect(() => {
+    console.log(session)
+    console.log(loading)
     if (session) {
       Router.push("/bots");
-    } else if (!loading) {
+    } else if (session === null) {
+      // Can't use loading, as it seems to hang as 'true'
       Router.push("/auth/signin");
     }
   }, [session]);
@@ -25,14 +27,4 @@ export default function Page({csrfToken}) {
       </div>
     </PublicLayout>
   )
-}
-
-export async function getServerSideProps() {
-
-  const csrfToken = await getCsrfToken();
-  return {
-    props: {
-      csrfToken
-    }
-  }
 }
