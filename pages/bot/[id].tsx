@@ -6,17 +6,21 @@ import dynamic from 'next/dynamic'
 import ErrorAlert from "../../components/ErrorAlert";
 const DynamicReactJson = dynamic(import('react-json-view'), { ssr: false });
 import Router from 'next/router';
+import InputArgsFields from '../../components/InputArgsFields';
+import { Bot } from '../../server/models/Bot';
 
 
 const BotView = ({botInfo}: AppProps) => {
 
   const [loading, setLoading] = useState(false);
+  const [inputArgs, setInputArgs] = useState({});
   const [runError, setRunError] = useState(null);
 
   const handleBotRun = async () => {
     setLoading(true);
     const run = await fetch(`/api/botcommand/bots/${botInfo.id}/start`, {
-      'method': 'POST'
+      'method': 'POST',
+      body: JSON.stringify(inputArgs),
     })
     setLoading(false);
     if (!run.ok) {
@@ -50,6 +54,9 @@ const BotView = ({botInfo}: AppProps) => {
               </div>
             </div>
           </div>
+          {botInfo.type === 'uipath' ? (
+            <div><InputArgsFields inputArgs={botInfo.properties.InputArguments} inputArgsChanges={setInputArgs}></InputArgsFields></div>
+          ) : ( false )}
           <div className="px-4 py-5 sm:p-0">
             <dl>
               <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
