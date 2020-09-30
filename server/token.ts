@@ -7,11 +7,11 @@ export interface Token {
   name: string
   email: string
   picture?: string
-  iat: Number
-  exp: Number
+  iat: number
+  exp: number
 }
 
 export async function getToken (req: NextApiRequest): Promise<Token> {
   const config = await getConfig()
-  return <Token> await jwt.getToken({ req, secret: config.secret })
+  return (await jwt.getToken({ req, secret: config.secret }) as Token)
 }

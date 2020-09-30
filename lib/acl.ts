@@ -17,12 +17,20 @@ function regexify(str: string) {
   return RegExp(`^${str}$`, 'i')
 }
 
+interface ACLs {
+  groups: {
+    [key: string]: {
+      emails: string[]
+    }
+  }
+}
+
 export class ACL {
 
-  acl: object
+  acl: ACLs
   bots: Bot[]
 
-  constructor(acl: object, bots: Bot[]) {
+  constructor(acl: any, bots: Bot[]) {
     this.acl = acl
     this.bots = bots
   }
@@ -30,13 +38,13 @@ export class ACL {
   // Get back a list of bots that a user is allowed to use
   listBots(token: Token): Bot[] {
     const allowedBots = []
-    for (let bot of this.bots) {
-      let botAclGroups = bot.botConfig['acl']['groups']
+    for (const bot of this.bots) {
+      const botAclGroups = bot.botConfig.acl.groups
       let botAllowed = false
-      for (let group of botAclGroups) {
-        let acl = this.acl['groups'][group]
-        for (let email of acl.emails) {
-          let regex = regexify(email)
+      for (const group of botAclGroups) {
+        const acl = this.acl.groups[group]
+        for (const email of acl.emails) {
+          const regex = regexify(email)
           if (regex.test(token.email)) {
             allowedBots.push(bot)
             botAllowed = true
@@ -52,11 +60,11 @@ export class ACL {
   // Returns a Boolean noting is a user is able to access a process
   isAllowed(token: Token, botId: string): boolean {
     const bot = this.bots.find((b) => botId === b.id)
-    const botAclGroups = bot.botConfig['acl']['groups']
-    for (let group of botAclGroups) {
-      let acl = this.acl['groups'][group]
-      for (let email of acl.emails) {
-        let regex = regexify(email)
+    const botAclGroups = bot.botConfig.acl.groups
+    for (const group of botAclGroups) {
+      const acl = this.acl.groups[group]
+      for (const email of acl.emails) {
+        const regex = regexify(email)
         if (regex.test(token.email)) {
           return true
         }

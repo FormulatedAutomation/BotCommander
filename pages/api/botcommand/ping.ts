@@ -4,7 +4,6 @@ import { BotCommandContext, ensureLoggedIn } from '../../../server/middleware/co
 const handler = (req: NextApiRequest, res: NextApiResponse,
   context: BotCommandContext) => {
   const token = context.token
-  console.log('JSON Web Token', token)
   res.statusCode = 200
   res.json({ token })
 }

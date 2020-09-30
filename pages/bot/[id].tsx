@@ -23,7 +23,6 @@ const BotView = ({botInfo}: AppProps) => {
       setRunError('Error starting that process');
     } else {
       const jsonResponse = await run.json();
-      console.log(jsonResponse)
       Router.push(`/job/${botInfo.id}/${jsonResponse.runId}`)
     }
   }

@@ -58,7 +58,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   const botRes = await fetch(`${hostname}/api/botcommand/bots/${botId}`, options)
   const botInfo = await botRes.json()
   const jobInfo = await res.json()
-  console.log(jobInfo)
   return {
     props: {
       jobInfo,

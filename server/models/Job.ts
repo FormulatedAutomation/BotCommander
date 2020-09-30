@@ -1,7 +1,3 @@
-import { Response } from 'node-fetch'
-import RoboCloudAPI from '../services/robocloud'
-import UiPathAPI from '../services/uipath'
-import { Bot } from './Bot'
 
 export enum JobState {
   Complete,
@@ -9,110 +5,13 @@ export enum JobState {
   Failed,
 }
 
+export interface JobStartResponse {
+  runId: string
+  _result: any
+}
 
 export abstract class Job {
   abstract async properties(): Promise<object>
 }
 
-export class UiPathJob extends Job {
-  api: UiPathAPI
-  jobKey: string
-  authenticated: boolean
-  jobInfo: object
 
-  constructor(jobKey: string, api: UiPathAPI) {
-    super()
-    this.api = api
-    this.jobKey = jobKey
-    this.authenticated = false
-  }
-
-  // Inplace deserialization
-  deserializeArgs(): void {
-    if (!this.jobInfo) {
-      throw "Must first fetch process info"
-    }
-    this.jobInfo['InputArguments'] = JSON.parse(this.jobInfo['InputArguments'])
-    this.jobInfo['OutputArguments'] = JSON.parse(this.jobInfo['OutputArguments'])
-  }
-
-  // Normalize the states
-  state(state: string): JobState {
-    if (state === 'Successful') {
-      return JobState.Complete
-    } else if (state === 'Pending') {
-      return JobState.Pending
-    }
-    return JobState.Failed
-  }
-
-  async properties(force?: boolean) {
-    // get the processes information and store it on the class instance
-    // Don't refetch unless it's forced
-    if (this.jobInfo && !force) {
-      return this.jobInfo
-    }
-    this.jobInfo = await this.api.status(this.jobKey)
-    this.deserializeArgs()
-    return  {
-      id: this.jobKey,
-      state: JobState[this.state(this.jobInfo['State'])],
-      info: this.jobInfo
-    }
-  }
-
-
-}
-
-
-export class RoboCloudJob extends Job {
-
-  bot: Bot
-  service: RoboCloudAPI
-  runId: string
-
-  constructor(runId: string, bot: Bot) {
-    super()
-    this.bot = bot
-    this.service = new RoboCloudAPI(bot)
-    this.runId = runId
-  }
-
-  // Normalize the states
-  state(state: string): JobState {
-    if (state === 'COMPL') {
-      return JobState.Complete
-    } else if (state === 'PEND') {
-      return JobState.Pending
-    } else if (state === 'IP') {
-      return JobState.Pending
-    } else if (state === 'IND') {
-      return JobState.Pending
-    }
-    return JobState.Failed
-  }
-
-  async properties() {
-    const status = await this.service.status(this.runId)
-    const state = this.state(status['state'])
-    let artifacts = []
-    if (state === JobState.Complete) {
-      artifacts = await this.artifacts(status['robotRuns'][0]['id'])
-    }
-    return {
-      id: this.runId,
-      state: JobState[state],
-      properties: status,
-      artifacts,
-    }
-  }
-
-  async artifacts(robotRunId: string): Promise<any[]> {
-    return await this.service.artifacts(this.runId, robotRunId)
-  }
-
-  async getArtifact(robotRunId: string, artifactId: string, filename:string): Promise<Response> {
-    return await this.service.getArtifact(this.runId, robotRunId, artifactId, filename)
-  }
-
-}

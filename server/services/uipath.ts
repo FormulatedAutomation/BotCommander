@@ -1,5 +1,5 @@
 import Orchestrator from 'uipath-orchestrator'
-import { Bot } from '../models/Bot'
+import { Bot } from "../models/Bot"
 
 export default class UiPathAPI {
   findJob(jobKey: string): object | PromiseLike<object> {
@@ -14,7 +14,7 @@ export default class UiPathAPI {
   async start(startData: object) {
     return new Promise((res, rej) => {
       const url = '/odata/Jobs/UiPath.Server.Configuration.OData.StartJobs'
-      this.api.post(url, startData, (err, data) => {
+      this.api.post(url, startData, (err: Error, data: any) => {
         if (err) {
           return rej(err)
         }
@@ -29,12 +29,12 @@ export default class UiPathAPI {
       const query = {
         '$filter': `Id eq ${jobId}`,
       }
-      this.api.get(url, query, (err, data) => {
+      this.api.get(url, query, (err: Error, data: {value: any[]}) => {
         if (err) {
           return rej(err)
         }
-        if (data['value'] && data['value'].length > 0) {
-          res(data['value'][0])
+        if (data.value && data.value.length > 0) {
+          res(data.value[0])
         } else {
           rej({Error: 'No results', _result: data})
         }
@@ -48,12 +48,12 @@ export default class UiPathAPI {
       const query = {
         '$filter': `ProcessKey eq '${processKey}'`
       }
-      this.api.get(url, query, (err, data) => {
+      this.api.get(url, query, (err: Error, data: {value: any[]}) => {
         if (err) {
           return rej(err)
         }
-        if (data['value'] && data['value'].length > 0) {
-          res(data['value'][0])
+        if (data.value && data.value.length > 0) {
+          res(data.value[0])
         } else {
           rej({Error: 'No results', _result: data})
         }

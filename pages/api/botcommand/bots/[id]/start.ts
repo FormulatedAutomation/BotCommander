@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { RoboCloudBot, UiPathBot } from '../../../../../server/models/Bot'
+import { RoboCloudBot } from "../../../../../server/models/RoboCloudBot"
+import { UiPathBot } from "../../../../../server/models/UiPathBot"
 import { BotCommandContext, ensureLoggedIn } from '../../../../../server/middleware/context'
 import { BotConfig } from '../../../../../lib/config'
 
@@ -7,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCo
   const { bots} = context
   if (req.method === 'POST') {
     let bot = null
-    for (let b of bots) {
+    for (const b of bots) {
       if (b.id === req.query.id) {
         bot = b
       }

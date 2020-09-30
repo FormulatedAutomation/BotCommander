@@ -1,14 +1,13 @@
 import styles from '../styles/Home.module.css'
 import Layout from "../../components/Layout";
 import React, {Provider, useEffect} from 'react'
-import { providers, signIn } from 'next-auth/client'
+import { providers as getProviders, signIn } from 'next-auth/client'
 import PublicLayout from "../../components/PublicLayout";
 import { Providers } from 'next-auth/providers';
 
 
 
 export default function SignIn({ providers }: {providers: Providers}) {
-  console.log(providers)
   return (
     <PublicLayout>
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -37,6 +36,6 @@ export default function SignIn({ providers }: {providers: Providers}) {
 
 SignIn.getInitialProps = async (context) => {
   return {
-    providers: await providers(context)
+    providers: await getProviders(context)
   }
 }

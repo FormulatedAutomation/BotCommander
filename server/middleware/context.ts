@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next'
 import { ACL } from '../../lib/acl'
 import {get as getConfig} from '../../lib/config'
 import logger from '../../lib/logging'
-import { Bot } from '../models/Bot'
+import { Bot } from "../models/Bot"
 
 import {getToken, Token} from '../token'
 
@@ -18,7 +18,7 @@ async function getContext(req: NextApiRequest): Promise<BotCommandContext> {
   return {
     acl: config.acl,
     bots: config.acl.listBots(token),
-    token: token,
+    token,
   }
 }
 

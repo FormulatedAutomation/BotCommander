@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { Bot, UiPathBot, RoboCloudBot } from '../../../../server/models/Bot'
+import { Bot } from "../../../../server/models/Bot"
+import { RoboCloudBot } from "../../../../server/models/RoboCloudBot"
+import { UiPathBot } from "../../../../server/models/UiPathBot"
 import { BotCommandContext, ensureLoggedIn } from '../../../../server/middleware/context'
 import { ACL } from '../../../../lib/acl'
 

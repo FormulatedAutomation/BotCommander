@@ -2,7 +2,7 @@
 import {ACL} from '../acl'
 import {acl, bots, sources} from '../../config/api'
 import { Token } from '../../server/token';
-import { Bot } from '../../server/models/Bot';
+import { createFromConfig } from "../../server/models/BotFactory";
 
 function getEmailToken(email: string): Token {
   return {
@@ -13,7 +13,7 @@ function getEmailToken(email: string): Token {
   }
 }
 
-const botInstances = bots.map((bot) => Bot.createFromConfig(bot, sources))
+const botInstances = bots.map((bot) => createFromConfig(bot, sources))
 
 it('should validate against a specific email', () => {
   const aclObj = new ACL(acl, botInstances)

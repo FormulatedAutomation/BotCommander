@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import { Bot } from '../models/Bot'
+import { Bot } from "../models/Bot"
 
 export default class RoboCloudAPI {
   secret: string
@@ -36,8 +36,6 @@ export default class RoboCloudAPI {
         'robocloud-process-secret': this.secret,
       },
     }
-    console.log(options)
-    console.log(this.processId)
     const result = await fetch(
       `https://api.eu1.robocloud.eu/workspace-v1/workspaces/${this.workspaceId}/processes/${this.processId}/runs/${id}`,
       options
@@ -67,9 +65,6 @@ export default class RoboCloudAPI {
         'robocloud-process-secret': this.secret,
       },
     }
-    console.log(
-      `https://api.eu1.robocloud.eu/workspace-v1/workspaces/${this.workspaceId}/processes/${this.processId}/runs/${runId}/robotRuns/${robotRunId}/artifacts/${artifactId}/${filename}`
-    )
     return await fetch(
       `https://api.eu1.robocloud.eu/workspace-v1/workspaces/${this.workspaceId}/processes/${this.processId}/runs/${runId}/robotRuns/${robotRunId}/artifacts/${artifactId}/${filename}`,
       options
