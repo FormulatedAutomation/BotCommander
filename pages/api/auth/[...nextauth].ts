@@ -11,7 +11,10 @@ function setup(req: NextApiRequest, res: NextApiResponse<any>) {
       secret: configs.secret,
       jwt: {
         secret: configs.secret
-      }
+      },
+      pages: {
+        signIn: '/auth/signin',
+      },
 
       // A database is optional, but required to persist accounts in a database
       // database: process.env.DATABASE_URL,
