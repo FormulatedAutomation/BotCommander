@@ -6,6 +6,7 @@ import { Token } from "../server/token"
 
 // Test to see if the string where using looks like it's a regex
 const regexStringMatch = /^\/.+\/[i]?$/
+const regexSplatEmailMatch = /^\*@[a-z0-9\.]+$/
 
 // Return a regex object from a string
 function regexify(str: string) {
@@ -13,6 +14,10 @@ function regexify(str: string) {
     const parts = str.split('/')
     parts.shift()
     return RegExp(parts[0], parts[1])
+  } else if (regexSplatEmailMatch.test(str)) {
+    const parts = str.split('@')
+    const emailRegex = RegExp(`^[A-Z0-9._\\-+\\%]+@${parts[1]}$`, 'i')
+    return RegExp(emailRegex)
   }
   return RegExp(`^${str}$`, 'i')
 }
