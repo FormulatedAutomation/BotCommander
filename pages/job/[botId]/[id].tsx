@@ -3,6 +3,7 @@ import {GetServerSideProps, GetServerSidePropsContext, NextPageContext} from 'ne
 import {useState} from 'react';
 import dynamic from 'next/dynamic'
 import Layout from '../../../components/Layout'
+import AttachmentTable from '../../../components/AttachmentTable'
 
 const DynamicReactJson = dynamic(import('react-json-view'), {ssr: false});
 import Link from 'next/link';
@@ -66,6 +67,10 @@ const BotView = ({jobInfo, botInfo}: AppProps) => {
             </div>
           </div>
           <div className="px-4 py-5">
+            {job.artifacts && <div className="mb-4">
+              <AttachmentTable artifacts={job.artifacts} job={job} bot={bot} />
+            </div>}
+            {job.OutputArguments && <div>{job.OutputArguments}</div>}
             <span className="inline-flex rounded-md shadow-sm">
               <button type="button" onClick={() => setRawResponseOpen(!rawResponseOpen)}
                       className="flex full-w items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150">

@@ -5,7 +5,7 @@ const BotRunForm = ({botInfo, setInputArgs, handleSubmit, loading}) => {
   return (
     <div className="px-4 py-4">
 
-      <h2>Input Arguments</h2> {loading && <p>Loading</p>}
+      <h2>Input Arguments</h2>
 
       <div className="py-3">
 
