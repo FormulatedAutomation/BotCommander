@@ -22,14 +22,13 @@ const InputArgsFields: FunctionComponent<{ inputArgs: InputArgs[], inputArgsChan
   return (
     <div>
       {Object.values(inputArgs).map(inputArg => (
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <span className="block w-full rounded-md shadow-sm">
-              <div key={inputArg.name}>
-                <label>{inputArg.name}</label>
-                <input type="text" name={inputArg.name} value={inputValues[inputArg.name]} onChange={handleChange}/>
-              </div>
-            </span>
+        <div>
+          <label htmlFor="{inputArg.name}" className="block text-sm font-medium leading-5 text-gray-700">{inputArg.name}</label>
+          <div className="mt-1 relative rounded-md shadow-sm">
+            <input id="{inputArg.name}"
+                   value={inputValues[inputArg.name]}
+                   onChange={handleChange}
+                   className="form-input block w-full sm:text-sm sm:leading-5" />
           </div>
         </div>
       ))}

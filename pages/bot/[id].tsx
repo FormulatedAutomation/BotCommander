@@ -4,6 +4,8 @@ import {GetServerSideProps, GetServerSidePropsContext, NextPageContext} from 'ne
 import {useState} from 'react';
 import dynamic from 'next/dynamic'
 import ErrorAlert from "../../components/ErrorAlert";
+import BotRunForm from "../../components/BotRunForm";
+import BotRunButton from '../../components/BotRunButton';
 const DynamicReactJson = dynamic(import('react-json-view'), { ssr: false });
 import Router from 'next/router';
 import InputArgsFields from '../../components/InputArgsFields';
@@ -22,9 +24,9 @@ const BotView = ({botInfo}: AppProps) => {
       'method': 'POST',
       body: JSON.stringify(inputArgs),
     })
-    setLoading(false);
     if (!run.ok) {
       setRunError('Error starting that process');
+      setLoading(false);
     } else {
       const jsonResponse = await run.json();
       Router.push(`/job/${botInfo.id}/${jsonResponse.runId}`)
@@ -43,19 +45,17 @@ const BotView = ({botInfo}: AppProps) => {
                   {botInfo.name}
                 </h3>
               </div>
-              <div className="ml-4 mt-2 flex-shrink-0">
-              <span className="inline-flex rounded-md shadow-sm">
-                <button type="button"
-                        onClick={handleBotRun}
-                        className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:shadow-outline-teal focus:border-teal-700 active:bg-teal-700">
-                  Run This Bot
-                </button>
-              </span>
-              </div>
             </div>
           </div>
           {botInfo.type === 'uipath' ? (
-            <div><InputArgsFields inputArgs={botInfo.properties.InputArguments} inputArgsChanges={setInputArgs}></InputArgsFields></div>
+            <BotRunForm botInfo={botInfo}
+                        setInputArgs={setInputArgs}
+                        loading={loading}
+                        handleSubmit={handleBotRun} />
+          ) : ( false )}
+
+          {botInfo.type === 'robocloud' ? (
+            <div className="px-4 py-4"><BotRunButton loading={loading} handlePress={handleBotRun} /></div>
           ) : ( false )}
           <div className="px-4 py-5 sm:p-0">
             <dl>
