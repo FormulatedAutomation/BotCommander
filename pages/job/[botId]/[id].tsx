@@ -21,10 +21,10 @@ const BotView = ({jobInfo, botInfo}: AppProps) => {
     const hostname = process.env.HOST_URL || 'http://localhost:3000'
     const res = await fetch(`${hostname}/api/botcommand/jobs/${botId}/${jobId}`)
     const botRes = await fetch(`${hostname}/api/botcommand/bots/${botId}`)
-    const botInfo = await botRes.json()
-    const jobInfo = await res.json()
-    setBot(botInfo)
-    setJob(jobInfo)
+    const refreshedBotInfo = await botRes.json()
+    const refreshedJobInfo = await res.json()
+    setBot(refreshedBotInfo)
+    setJob(refreshedJobInfo)
     setLoading(false);
   }
 
