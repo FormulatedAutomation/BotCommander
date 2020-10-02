@@ -6,13 +6,13 @@ import { Bot } from "../models/Bot"
 
 import {getToken, Token} from '../token'
 
-export interface BotCommandContext {
+export interface BotCommanderContext {
   bots: Bot[]
   acl: ACL
   token: Token
 }
 
-async function getContext(req: NextApiRequest): Promise<BotCommandContext> {
+async function getContext(req: NextApiRequest): Promise<BotCommanderContext> {
   const token = await getToken(req)
   const config = await getConfig()
   return {
@@ -23,7 +23,7 @@ async function getContext(req: NextApiRequest): Promise<BotCommandContext> {
 }
 
 export function setup(handler: (req: NextApiRequest, res: NextApiResponse,
-  context?: BotCommandContext) => void | Promise<void>) {
+  context?: BotCommanderContext) => void | Promise<void>) {
   return (req: NextApiRequest, res: NextApiResponse) => {
     return new Promise((resolve, reject)=>{
       return getContext(req)
@@ -34,7 +34,7 @@ export function setup(handler: (req: NextApiRequest, res: NextApiResponse,
 }
 
 export function ensureLoggedIn(handler: (req: NextApiRequest, res: NextApiResponse,
-  context?: BotCommandContext) => void | Promise<void>) {
+  context?: BotCommanderContext) => void | Promise<void>) {
   return (req: NextApiRequest, res: NextApiResponse) => {
     return new Promise((resolve, reject)=>{
       return getContext(req)

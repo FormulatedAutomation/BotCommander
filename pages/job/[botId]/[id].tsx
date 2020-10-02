@@ -54,8 +54,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   const {botId, id} = query
   const hostname = process.env.HOST_URL || 'http://localhost:3000'
   const options = {headers: {cookie: ctx.req.headers.cookie}}
-  const res = await fetch(`${hostname}/api/botcommand/jobs/${botId}/${id}`, options)
-  const botRes = await fetch(`${hostname}/api/botcommand/bots/${botId}`, options)
+  const res = await fetch(`${hostname}/api/botcommander/jobs/${botId}/${id}`, options)
+  const botRes = await fetch(`${hostname}/api/botcommander/bots/${botId}`, options)
   const botInfo = await botRes.json()
   const jobInfo = await res.json()
   return {

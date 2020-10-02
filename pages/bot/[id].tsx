@@ -18,7 +18,7 @@ const BotView = ({botInfo}: AppProps) => {
 
   const handleBotRun = async () => {
     setLoading(true);
-    const run = await fetch(`/api/botcommand/bots/${botInfo.id}/start`, {
+    const run = await fetch(`/api/botcommander/bots/${botInfo.id}/start`, {
       'method': 'POST',
       body: JSON.stringify(inputArgs),
     })
@@ -146,7 +146,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   const id = query.id
   const hostname = process.env.HOST_URL || 'http://localhost:3000'
   const options = {headers: {cookie: ctx.req.headers.cookie}}
-  const res = await fetch(`${hostname}/api/botcommand/bots/${id}`, options)
+  const res = await fetch(`${hostname}/api/botcommander/bots/${id}`, options)
   botInfo = await res.json()
   return {
     props: {

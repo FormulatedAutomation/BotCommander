@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { RoboCloudBot } from "../../../../../server/models/RoboCloudBot"
 import { UiPathBot } from "../../../../../server/models/UiPathBot"
-import { BotCommandContext, ensureLoggedIn } from '../../../../../server/middleware/context'
+import { BotCommanderContext, ensureLoggedIn } from '../../../../../server/middleware/context'
 import { BotConfig } from '../../../../../lib/config'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCommandContext) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCommanderContext) => {
   const { bots } = context
   if (req.method === 'POST') {
     let bot = null

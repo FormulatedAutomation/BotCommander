@@ -25,7 +25,7 @@ export async function getServerSideProps(context) {
   const hostname = process.env.HOST_URL || 'http://localhost:3000'
   const options = { headers: { cookie: context.req.headers.cookie } }
 
-  const res = await fetch(`${hostname}/api/botcommand/bots`, options)
+  const res = await fetch(`${hostname}/api/botcommander/bots`, options)
   if (!res.ok) {
     responseError = "Unable to connect to API"
   } else {
