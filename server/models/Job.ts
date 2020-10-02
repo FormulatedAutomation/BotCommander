@@ -3,6 +3,7 @@ export enum JobState {
   Complete,
   Pending,
   Failed,
+  Running,
 }
 
 export interface JobStartResponse {
