@@ -79,7 +79,7 @@ const Layout = (props) => {
           <div className="flex flex-col w-64 border-r border-gray-200 bg-white">
             <div className="h-0 flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
               <div className="flex items-center flex-shrink-0 px-4">
-                <h3 className="text-lg font-bold">StatelessRPA</h3>
+                <h3 className="text-lg font-bold">BotCommander</h3>
               </div>
               <nav className="mt-5 flex-1 px-2 bg-white">
                 {MENU.map((item, i) => (
