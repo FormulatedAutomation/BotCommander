@@ -5,7 +5,7 @@ const AttachmentTable = ({artifacts, job, bot}) => (
       <ul>
         {artifacts.map((artifact, i) => (<li key={`file-${i}`}>
           <a target="_blank"
-             href={`/api/botcommand/jobs/${bot.id}/${job.id}/artifacts/${artifact.id}/${artifact.fileName}`}
+             href={`/api/botcommander/jobs/${bot.id}/${job.properties.robotRuns[0].id}/artifacts/${artifact.id}/${artifact.fileName}`}
              className="block hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition duration-150 ease-in-out">
             <div className="flex items-center px-4 py-4 sm:px-6">
               <div className="min-w-0 flex-1 flex items-center">
