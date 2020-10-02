@@ -6,6 +6,10 @@ import { NextApiRequest, NextApiResponse } from 'next'
 const SIGNIN_PATH = '/auth/signin'
 const AFTER_SIGNIN_PATH = '/bots'
 
+const setupNextAuth = ({secret}): any => {
+
+}
+
 function setup(req: NextApiRequest, res: NextApiResponse<any>) {
   return config.get().then((configs) => {
     const options = {
