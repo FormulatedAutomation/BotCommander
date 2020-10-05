@@ -1,5 +1,5 @@
 import jwt from 'next-auth/jwt'
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextApiRequest } from 'next'
 
 import { get as getConfig } from '../lib/config'
 

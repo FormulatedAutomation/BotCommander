@@ -1,15 +1,15 @@
-import { Bot } from "../server/models/Bot"
+import { Bot } from '../server/models/Bot'
 // Handles determining what resources we can access
 // Expects a list of processes and a list of user ACLs
 
-import { Token } from "../server/token"
+import { Token } from '../server/token'
 
 // Test to see if the string where using looks like it's a regex
 const regexStringMatch = /^\/.+\/[i]?$/
-const regexSplatEmailMatch = /^\*@[a-z0-9\.]+$/
+const regexSplatEmailMatch = /^\*@[a-z0-9.]+$/
 
 // Return a regex object from a string
-function regexify(str: string) {
+function regexify (str: string) {
   if (regexStringMatch.test(str)) {
     const parts = str.split('/')
     parts.shift()
@@ -31,17 +31,16 @@ interface ACLs {
 }
 
 export class ACL {
-
   acl: ACLs
   bots: Bot[]
 
-  constructor(acl: any, bots: Bot[]) {
+  constructor (acl: any, bots: Bot[]) {
     this.acl = acl
     this.bots = bots
   }
 
   // Get back a list of bots that a user is allowed to use
-  listBots(token: Token): Bot[] {
+  listBots (token: Token): Bot[] {
     const allowedBots = []
     for (const bot of this.bots) {
       const botAclGroups = bot.botConfig.acl.groups
@@ -63,7 +62,7 @@ export class ACL {
   }
 
   // Returns a Boolean noting is a user is able to access a process
-  isAllowed(token: Token, botId: string): boolean {
+  isAllowed (token: Token, botId: string): boolean {
     const bot = this.bots.find((b) => botId === b.id)
     const botAclGroups = bot.botConfig.acl.groups
     for (const group of botAclGroups) {
@@ -77,5 +76,4 @@ export class ACL {
     }
     return false
   }
-
 }

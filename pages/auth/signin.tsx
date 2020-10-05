@@ -1,13 +1,9 @@
-import styles from '../styles/Home.module.css'
-import Layout from "../../components/Layout";
-import React, {Provider, useEffect} from 'react'
+import React from 'react'
 import { providers as getProviders, signIn } from 'next-auth/client'
-import PublicLayout from "../../components/PublicLayout";
-import { Providers } from 'next-auth/providers';
+import PublicLayout from '../../components/PublicLayout'
+import { Providers } from 'next-auth/providers'
 
-
-
-export default function SignIn({ providers }: {providers: Providers}) {
+export default function SignIn ({ providers }: {providers: Providers}) {
   return (
     <PublicLayout>
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -17,7 +13,7 @@ export default function SignIn({ providers }: {providers: Providers}) {
           </h2>
         </div>
         {Object.values(providers).map(provider => (
-          <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+          <div key={provider.id} className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
               <span className="block w-full rounded-md shadow-sm">
                 <div key={provider.name}>
@@ -36,6 +32,6 @@ export default function SignIn({ providers }: {providers: Providers}) {
 
 SignIn.getInitialProps = async (context) => {
   return {
-    providers: await getProviders(context)
+    providers: await getProviders(context),
   }
 }

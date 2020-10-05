@@ -14,5 +14,3 @@ export interface JobStartResponse {
 export abstract class Job {
   abstract async properties(): Promise<object>
 }
-
-

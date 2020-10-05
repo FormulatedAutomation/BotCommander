@@ -1,64 +1,64 @@
 import Orchestrator from 'uipath-orchestrator'
-import { Bot } from "../models/Bot"
+import { Exception } from '../../lib/Exception'
 
 export default class UiPathAPI {
-  findJob(jobKey: string): object | PromiseLike<object> {
-    throw new Error('Method not implemented.')
+  findJob (jobKey: string): object | PromiseLike<object> {
+    throw new Error(`Method not implemented on yet - Jobkey ${jobKey}`)
   }
+
   api: Orchestrator
 
-  constructor(source: object) {
+  constructor (source: object) {
     this.api = new Orchestrator(source)
   }
 
-  async start(startData: object) {
-    return new Promise((res, rej) => {
+  async start (startData: object) {
+    return new Promise((resolve, reject) => {
       const url = '/odata/Jobs/UiPath.Server.Configuration.OData.StartJobs'
       this.api.post(url, startData, (err: Error, data: any) => {
         if (err) {
-          return rej(err)
+          return reject(err)
         }
-        res(data)
+        resolve(data)
       })
     })
   }
 
-  async status(jobId: string): Promise<object> {
-    return new Promise((res, rej) => {
-      const url = `/odata/Jobs`
+  async status (jobId: string): Promise<object> {
+    return new Promise((resolve, reject) => {
+      const url = '/odata/Jobs'
       const query = {
-        '$filter': `Id eq ${jobId}`,
+        $filter: `Id eq ${jobId}`,
       }
       this.api.get(url, query, (err: Error, data: {value: any[]}) => {
         if (err) {
-          return rej(err)
+          return reject(err)
         }
         if (data.value && data.value.length > 0) {
-          res(data.value[0])
+          resolve(data.value[0])
         } else {
-          rej({Error: 'No results', _result: data})
+          reject(new Exception('No Results', { _result: data }))
         }
       })
     })
   }
 
-  async findByProcessKey(processKey: string): Promise<object> {
-    return new Promise((res, rej) => {
+  async findByProcessKey (processKey: string): Promise<object> {
+    return new Promise((resolve, reject) => {
       const url = '/odata/Releases'
       const query = {
-        '$filter': `ProcessKey eq '${processKey}'`
+        $filter: `ProcessKey eq '${processKey}'`,
       }
       this.api.get(url, query, (err: Error, data: {value: any[]}) => {
         if (err) {
-          return rej(err)
+          return reject(err)
         }
         if (data.value && data.value.length > 0) {
-          res(data.value[0])
+          resolve(data.value[0])
         } else {
-          rej({Error: 'No results', _result: data})
+          reject(new Exception('No Results', { _result: data }))
         }
       })
     })
   }
-
 }

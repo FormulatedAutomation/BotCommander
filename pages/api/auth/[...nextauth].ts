@@ -6,14 +6,14 @@ import { NextApiRequest, NextApiResponse } from 'next'
 const SIGNIN_PATH = '/auth/signin'
 const AFTER_SIGNIN_PATH = '/bots'
 
-function setup(req: NextApiRequest, res: NextApiResponse<any>) {
+function setup (req: NextApiRequest, res: NextApiResponse<any>) {
   return config.get().then((configs) => {
     const options = {
       // Configure one or more authentication providers
       providers,
       secret: configs.secret,
       jwt: {
-        secret: configs.secret
+        secret: configs.secret,
       },
       pages: {
         signIn: SIGNIN_PATH,
@@ -26,13 +26,13 @@ function setup(req: NextApiRequest, res: NextApiResponse<any>) {
          */
         redirect: async (url, baseUrl) => {
           // Ensure we get redirected to /bots if the callback URL is /auth/signin
-          if (new URL(url).pathname ===  SIGNIN_PATH) {
+          if (new URL(url).pathname === SIGNIN_PATH) {
             return Promise.resolve(baseUrl + AFTER_SIGNIN_PATH)
           }
           return url.startsWith(baseUrl)
             ? Promise.resolve(url)
             : Promise.resolve(baseUrl)
-        }
+        },
       },
       // A database is optional, but required to persist accounts in a database
       // database: process.env.DATABASE_URL,

@@ -1,40 +1,36 @@
+import React, { useState } from 'react'
 import Layout from '../../components/Layout'
-import {AppProps} from 'next/dist/next-server/lib/router/router'
-import {GetServerSideProps, GetServerSidePropsContext, NextPageContext} from 'next'
-import {useState} from 'react';
+import { AppProps } from 'next/dist/next-server/lib/router/router'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import dynamic from 'next/dynamic'
-import ErrorAlert from "../../components/ErrorAlert";
-import BotRunForm from "../../components/BotRunForm";
-import BotRunButton from '../../components/BotRunButton';
-const DynamicReactJson = dynamic(import('react-json-view'), { ssr: false });
-import Router from 'next/router';
-import InputArgsFields from '../../components/InputArgsFields';
-import { Bot } from '../../server/models/Bot';
+import ErrorAlert from '../../components/ErrorAlert'
+import BotRunForm from '../../components/BotRunForm'
+import BotRunButton from '../../components/BotRunButton'
+import Router from 'next/router'
+const DynamicReactJson = dynamic(import('react-json-view'), { ssr: false })
 
-
-const BotView = ({botInfo}: AppProps) => {
-
-  const [loading, setLoading] = useState(false);
-  const [inputArgs, setInputArgs] = useState({});
-  const [runError, setRunError] = useState(null);
+const BotView = ({ botInfo }: AppProps) => {
+  const [loading, setLoading] = useState(false)
+  const [inputArgs, setInputArgs] = useState({})
+  const [runError, setRunError] = useState(null)
 
   const handleBotRun = async () => {
-    setLoading(true);
+    setLoading(true)
     const run = await fetch(`/api/botcommander/bots/${botInfo.id}/start`, {
-      'method': 'POST',
+      method: 'POST',
       body: JSON.stringify(inputArgs),
     })
     if (!run.ok) {
-      setRunError('Error starting that process');
-      setLoading(false);
+      setRunError('Error starting that process')
+      setLoading(false)
     } else {
-      const jsonResponse = await run.json();
+      const jsonResponse = await run.json()
       Router.push(`/job/${botInfo.id}/${jsonResponse.runId}`)
     }
   }
 
   return (
-    <Layout wrapperClass={`bg-gray-50`}>
+    <Layout wrapperClass={'bg-gray-50'}>
       <div className="px-4 py-4">
         {runError && <ErrorAlert message={runError} />}
         <div className="bg-white shadow sm:rounded-lg">
@@ -49,14 +45,14 @@ const BotView = ({botInfo}: AppProps) => {
           </div>
           {botInfo.type === 'uipath' ? (
             <BotRunForm botInfo={botInfo}
-                        setInputArgs={setInputArgs}
-                        loading={loading}
-                        handleSubmit={handleBotRun} />
-          ) : ( false )}
+              setInputArgs={setInputArgs}
+              loading={loading}
+              handleSubmit={handleBotRun} />
+          ) : (false)}
 
           {botInfo.type === 'robocloud' ? (
             <div className="px-4 py-4"><BotRunButton loading={loading} handlePress={handleBotRun} /></div>
-          ) : ( false )}
+          ) : (false)}
           <div className="px-4 py-5 sm:p-0">
             <dl>
               <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
@@ -116,7 +112,7 @@ const BotView = ({botInfo}: AppProps) => {
                   Access
                 </dt>
                 <dd className="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
-                  <DynamicReactJson src={botInfo.acl} collapsed={false} name={false}  />
+                  <DynamicReactJson src={botInfo.acl} collapsed={false} name={false} />
                 </dd>
               </div>
             </dl>
@@ -126,7 +122,7 @@ const BotView = ({botInfo}: AppProps) => {
                   Properties
                 </dt>
                 <dd className="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
-                  <DynamicReactJson src={botInfo.properties} collapsed={false} name={false}  />
+                  <DynamicReactJson src={botInfo.properties} collapsed={false} name={false} />
                 </dd>
               </div>
             </dl>
@@ -145,14 +141,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   let botInfo = null
   const id = query.id
   const hostname = process.env.HOST_URL || 'http://localhost:3000'
-  const options = {headers: {cookie: ctx.req.headers.cookie}}
+  const options = { headers: { cookie: ctx.req.headers.cookie } }
   const res = await fetch(`${hostname}/api/botcommander/bots/${id}`, options)
   botInfo = await res.json()
   return {
     props: {
-      botInfo
-    }
+      botInfo,
+    },
   }
 }
 
-export default BotView;
+export default BotView

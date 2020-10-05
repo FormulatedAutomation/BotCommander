@@ -1,17 +1,17 @@
-import Link from "next/link";
-import Head from "next/head";
-import { useState } from "react";
-import { useRouter } from "next/router";
-import MENU from '../constants/menu';
-import ProgressBar from "./ProgressBar";
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import Link from 'next/link'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import MENU from '../constants/menu'
+import ProgressBar from './ProgressBar'
 
-
-const Layout = (props) => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const router = useRouter();
+const Layout = ({ children, wrapperClass }) => {
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const router = useRouter()
   const isActive = (path) => {
-    return router.pathname.includes(path) ? `bg-gray-100` : `bg-white`;
-  };
+    return router.pathname.includes(path) ? 'bg-gray-100' : 'bg-white'
+  }
 
   return (
     <div>
@@ -55,16 +55,16 @@ const Layout = (props) => {
                   <nav className="mt-5 px-2">
                     {MENU.map((item, i) => (
                       <Link href={item.link} key={i}>
-                      <a
-                        href="#"
-                        className={`group ${isActive(
-                          item.link
+                        <a
+                          href="#"
+                          className={`group ${isActive(
+                          item.link,
                         )} flex items-center px-2 py-2 text-base leading-6 font-medium text-gray-900 rounded-md focus:outline-none focus:bg-gray-200 transition ease-in-out duration-150`}
-                      >
-                        {item.icon}
-                        {item.label}
-                      </a>
-                    </Link>
+                        >
+                          {item.icon}
+                          {item.label}
+                        </a>
+                      </Link>
                     ))}
 
                   </nav>
@@ -84,24 +84,23 @@ const Layout = (props) => {
               <nav className="mt-5 flex-1 px-2 bg-white">
                 {MENU.map((item, i) => (
                   <Link href={item.link} key={i}>
-                  <a
-                    className={`group ${isActive(
-                      item.link
+                    <a
+                      className={`group ${isActive(
+                      item.link,
                     )} flex items-center px-2 py-2 text-sm leading-5 font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 transition ease-in-out duration-150`}
-                  >
-                    {item.icon}
-                    {item.label}
-                  </a>
-                </Link>
+                    >
+                      {item.icon}
+                      {item.label}
+                    </a>
+                  </Link>
                 ))}
-
 
               </nav>
             </div>
           </div>
         </div>
         <div
-          className={`flex flex-col w-0 flex-1 ${props.wrapperClass}`}
+          className={`flex flex-col w-0 flex-1 ${wrapperClass}`}
         >
           <div className="flex items-center md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3">
             <button
@@ -124,11 +123,16 @@ const Layout = (props) => {
               </svg>
             </button>
           </div>
-          {props.children}
+          {children}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+Layout.propTypes = {
+  children: PropTypes.element,
+  wrapperClass: PropTypes.string,
+}
+
+export default Layout

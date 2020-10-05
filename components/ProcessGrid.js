@@ -1,18 +1,20 @@
-import Link from "next/link";
-import classNames from 'classnames';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Link from 'next/link'
+import classNames from 'classnames'
 
-const ProcessGrid = ({processes}) => (
+const ProcessGrid = ({ processes }) => (
   <div>
     <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide">Processes</h2>
     <ul className="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-      {processes.map((process, i) => (<Link href={`/bot/${process.id}`}>
+      {processes.map((process, i) => (<Link key={`processLink-${i}`} href={`/bot/${process.id}`}>
         <a>
           <li className="cursor-pointer col-span-1 flex shadow-sm rounded-md">
             <div
               className={classNames({
                 'flex-shrink-0 flex items-center justify-center w-16 bg-white text-white text-sm leading-5 font-medium rounded-l-md': true,
                 'bot-uipath': process.type === 'uipath',
-                'bot-robocloud': process.type === 'robocloud'
+                'bot-robocloud': process.type === 'robocloud',
               })}>
 
             </div>
@@ -30,4 +32,8 @@ const ProcessGrid = ({processes}) => (
   </div>
 )
 
-export default ProcessGrid;
+ProcessGrid.propTypes = {
+  processes: PropTypes.array,
+}
+
+export default ProcessGrid

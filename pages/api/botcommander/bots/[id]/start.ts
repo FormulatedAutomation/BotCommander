@@ -1,8 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { RoboCloudBot } from "../../../../../server/models/RoboCloudBot"
-import { UiPathBot } from "../../../../../server/models/UiPathBot"
 import { BotCommanderContext, ensureLoggedIn } from '../../../../../server/middleware/context'
-import { BotConfig } from '../../../../../lib/config'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCommanderContext) => {
   const { bots } = context
@@ -17,9 +14,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCo
     res.statusCode = 200
     res.json(result)
   } else {
-      res.statusCode = 404
-      res.json({ Error: "Not Found" })
-      return
+    res.statusCode = 404
+    res.json({ Error: 'Not Found' })
   }
 }
 

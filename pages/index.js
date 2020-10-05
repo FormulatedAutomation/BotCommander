@@ -1,22 +1,21 @@
-import styles from '../styles/Home.module.css'
-import React, {useEffect} from 'react'
-import Router from 'next/router';
+import React, { useEffect } from 'react'
+import Router from 'next/router'
 import { useSession } from 'next-auth/client'
-import PublicLayout from "../components/PublicLayout";
+import PublicLayout from '../components/PublicLayout'
 
-export default function Page({}) {
+export default function Page () {
   const [session, loading] = useSession()
 
   useEffect(() => {
     console.log(session)
     console.log(loading)
     if (session) {
-      Router.push("/bots");
+      Router.push('/bots')
     } else if (session === null) {
       // Can't use loading, as it seems to hang as 'true'
-      Router.push("/auth/signin");
+      Router.push('/auth/signin')
     }
-  }, [session]);
+  }, [session])
 
   return (
     <PublicLayout>

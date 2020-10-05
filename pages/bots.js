@@ -1,11 +1,10 @@
+import React from 'react'
+import PropTypes from 'prop-types'
 import Layout from '../components/Layout'
-import { getSession } from 'next-auth/client'
-import ProcessGrid from "../components/ProcessGrid";
-import ErrorAlert from "../components/ErrorAlert";
+import ProcessGrid from '../components/ProcessGrid'
+import ErrorAlert from '../components/ErrorAlert'
 
-
-const Processes = ({processes, responseError}) => {
-
+const Processes = ({ processes, responseError }) => {
   return (
     <Layout>
       <div className="px-4 py-4">
@@ -17,27 +16,34 @@ const Processes = ({processes, responseError}) => {
   )
 }
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
-  let processes = [];
-  let responseError = false;
+Processes.propTypes = {
+  processes: PropTypes.array,
+  responseError: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool,
+  ]),
+}
+
+export async function getServerSideProps (context) {
+  let processes = []
+  let responseError = false
 
   const hostname = process.env.HOST_URL || 'http://localhost:3000'
   const options = { headers: { cookie: context.req.headers.cookie } }
 
   const res = await fetch(`${hostname}/api/botcommander/bots`, options)
   if (!res.ok) {
-    responseError = "Unable to connect to API"
+    responseError = 'Unable to connect to API'
   } else {
-    processes = await res.json();
+    processes = await res.json()
   }
 
   return {
     props: {
       processes,
-      responseError
-    }
+      responseError,
+    },
   }
 }
 
-export default Processes;
+export default Processes

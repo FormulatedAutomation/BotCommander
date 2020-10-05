@@ -1,5 +1,5 @@
-import { BotConfig } from '../../lib/config';
-import { Job } from './Job';
+import { BotConfig } from '../../lib/config'
+import { Job } from './Job'
 
 export abstract class Bot {
   abstract async properties(force?: boolean): Promise<object>;
