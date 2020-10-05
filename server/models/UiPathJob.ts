@@ -34,6 +34,8 @@ export class UiPathJob extends Job {
       return JobState.Complete
     } else if (state === 'Pending') {
       return JobState.Pending
+    } else if (state === 'Running') {
+      return JobState.Pending
     }
     return JobState.Failed
   }
