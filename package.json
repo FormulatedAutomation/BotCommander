@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p $PORT",
     "test": "jest",
-    "lint": "eslint \"pages/**\" \"lib/**\" \"server/**\"",
+    "lint": "eslint \"pages/**\" \"lib/**\" \"server/**\" \"components/**\"",
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {
