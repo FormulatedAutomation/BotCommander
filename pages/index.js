@@ -7,8 +7,6 @@ export default function Page () {
   const [session, loading] = useSession()
 
   useEffect(() => {
-    console.log(session)
-    console.log(loading)
     if (session) {
       Router.push('/bots')
     } else if (session === null) {

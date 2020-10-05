@@ -1,9 +1,24 @@
-import React from 'react'
-import { providers as getProviders, signIn } from 'next-auth/client'
-import PublicLayout from '../../components/PublicLayout'
+import React, { useEffect } from 'react'
+import { providers as getProviders, signIn, useSession } from 'next-auth/client'
 import { Providers } from 'next-auth/providers'
 
-export default function SignIn ({ providers }: {providers: Providers}) {
+import PublicLayout from '../../components/PublicLayout'
+import Router, { useRouter } from 'next/router'
+import { firstArrayElement } from '../../lib/utils'
+
+export default function SignIn ({ providers }: {providers: Providers }) {
+  const router = useRouter()
+  const [session] = useSession()
+
+  useEffect(() => {
+    if (session) {
+      if (router.query.callbackUrl) {
+        Router.push(firstArrayElement(router.query.callbackUrl))
+      }
+      Router.push('/bots')
+    }
+  }, [session])
+
   return (
     <PublicLayout>
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
