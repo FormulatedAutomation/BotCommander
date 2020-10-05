@@ -7,7 +7,5 @@ export const createFromConfig = (bot: BotConfig, sources: object): UiPathBot | R
   if (bot.type === 'uipath') {
     return new UiPathBot(bot, sources[bot.source])
   }
-  if (bot.type === 'robocloud')
-    return new RoboCloudBot(bot)
+  if (bot.type === 'robocloud') { return new RoboCloudBot(bot) }
 }
-

@@ -1,14 +1,14 @@
-import React from 'react';
-import Router from 'next/router';
-import NProgress from 'nprogress';
+import React from 'react'
+import Router from 'next/router'
+import NProgress from 'nprogress'
 
-const BAR_COLOR = '#ffcc00';
+const BAR_COLOR = '#ffcc00'
 
 Router.ready(() => {
-  Router.router.events.on('routeChangeStart', () => NProgress.start());
-  Router.router.events.on('routeChangeComplete', () => NProgress.done());
-  Router.router.events.on('routeChangeError', () => NProgress.done());
-});
+  Router.router.events.on('routeChangeStart', () => NProgress.start())
+  Router.router.events.on('routeChangeComplete', () => NProgress.done())
+  Router.router.events.on('routeChangeError', () => NProgress.done())
+})
 
 const ProgressBar = () => (
   <style jsx global>{`
@@ -37,6 +37,6 @@ const ProgressBar = () => (
       transform: rotate(3deg) translate(0px, -4px);
     }
   `}</style>
-);
+)
 
-export default ProgressBar;
+export default ProgressBar

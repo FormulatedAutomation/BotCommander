@@ -1,11 +1,11 @@
 import dotenv from 'dotenv'
-dotenv.config()
 
-import {get as getSecret} from '../config/secret'
-import {acl, bots, sources} from '../config/api'
-import { Bot } from "../server/models/Bot"
-import { createFromConfig } from "../server/models/BotFactory";
+import { get as getSecret } from '../config/secret'
+import { acl, bots, sources } from '../config/api'
+import { Bot } from '../server/models/Bot'
+import { createFromConfig } from '../server/models/BotFactory'
 import { ACL } from './acl'
+dotenv.config()
 
 export interface BotConfig {
   id: string
@@ -27,20 +27,19 @@ interface Config {
 
 let cached: boolean | Config = false
 
-export async function get(): Promise<Config> {
+export async function get (): Promise<Config> {
   // Allow for async setup later on if needed
   const botInstances = bots.map((bot) => createFromConfig(bot, sources))
   if (!cached) {
     cached = {
       secret: await getSecret(),
       acl: new ACL(acl, botInstances),
-      bots: botInstances
+      bots: botInstances,
     }
   }
-  return new Promise(((res, rej) => res(cached as Config)))
+  return new Promise((resolve) => resolve(cached as Config))
 }
 
 export default {
-  get
+  get,
 }
-

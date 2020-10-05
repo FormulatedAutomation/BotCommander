@@ -1,4 +1,5 @@
-import { ClassAttributes, FunctionComponent, PropsWithChildren, useEffect, useReducer } from "react"
+import React, { FunctionComponent, useEffect, useReducer } from 'react'
+import PropTypes from 'prop-types'
 
 interface InputArgs {
   name: string
@@ -6,13 +7,13 @@ interface InputArgs {
   [key: string]: any
 }
 
-const InputArgsFields: FunctionComponent<{ inputArgs: InputArgs[], inputArgsChanges: (any) }> = ({inputArgs, inputArgsChanges}) => {
-  const [inputValues, setInputValues] = useReducer((state, newState)=> ({...state, ...newState}), {})
+const InputArgsFields: FunctionComponent<{ inputArgs: InputArgs[], inputArgsChanges: (any) }> = ({ inputArgs, inputArgsChanges }) => {
+  const [inputValues, setInputValues] = useReducer((state, newState) => ({ ...state, ...newState }), {})
 
   const handleChange = evt => {
-    const name = evt.target.name;
-    const newValue = evt.target.value;
-    setInputValues({ [name]: newValue });
+    const name = evt.target.name
+    const newValue = evt.target.value
+    setInputValues({ [name]: newValue })
   }
 
   useEffect(() => {
@@ -22,19 +23,24 @@ const InputArgsFields: FunctionComponent<{ inputArgs: InputArgs[], inputArgsChan
   return (
     <div>
       {Object.values(inputArgs).map(inputArg => (
-        <div>
+        <div key={`input-${inputArg.name}`}>
           <label htmlFor="{inputArg.name}" className="block text-sm font-medium leading-5 text-gray-700">{inputArg.name}</label>
           <div className="mt-1 relative rounded-md shadow-sm">
             <input id="{inputArg.name}"
-                   value={inputValues[inputArg.name]}
-                   onChange={handleChange}
-                   className="form-input block w-full sm:text-sm sm:leading-5" />
+              value={inputValues[inputArg.name]}
+              onChange={handleChange}
+              className="form-input block w-full sm:text-sm sm:leading-5" />
           </div>
         </div>
       ))}
 
     </div>
   )
+}
+
+InputArgsFields.propTypes = {
+  inputArgs: PropTypes.array,
+  inputArgsChanges: PropTypes.func,
 }
 
 export default InputArgsFields

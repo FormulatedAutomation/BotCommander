@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { Bot } from "../../../../server/models/Bot"
+import { Bot } from '../../../../server/models/Bot'
 import { BotCommanderContext, ensureLoggedIn } from '../../../../server/middleware/context'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, ctx: BotCommanderContext) => {
@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, ctx: BotComman
     return
   }
   res.statusCode = 404
-  res.json({Error:'Bot Not Found'})
+  res.json({ Error: 'Bot Not Found' })
 }
 
 export default ensureLoggedIn(handler)
