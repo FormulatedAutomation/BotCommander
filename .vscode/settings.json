@@ -13,7 +13,14 @@ Happy linting! 💖
 */
 {
     "cSpell.words": [
-        "botcommander",
-        "esnext"
-    ]
+      "Jobkey",
+      "Robocloud",
+      "botcommander",
+      "esnext",
+      "odata",
+      "robo",
+      "uipath",
+      "tailwindcss"
+    ],
+    "cSpell.diagnosticLevel": "Hint",
 }
