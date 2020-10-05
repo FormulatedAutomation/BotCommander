@@ -9,7 +9,7 @@ import classNames from 'classnames'
 
 const DynamicReactJson = dynamic(import('react-json-view'), { ssr: false })
 
-const BotView = ({ jobInfo, botInfo }: AppProps) => {
+const BotView = ({ jobInfo, botInfo, hostUrl }: AppProps) => {
   const [loading, setLoading] = useState(false)
   const [bot, setBot] = useState(botInfo)
   const [job, setJob] = useState(jobInfo)
@@ -17,9 +17,8 @@ const BotView = ({ jobInfo, botInfo }: AppProps) => {
 
   const refresh = async (botId, jobId) => {
     setLoading(true)
-    const hostname = process.env.HOST_URL || 'http://localhost:3000'
-    const res = await fetch(`${hostname}/api/botcommander/jobs/${botId}/${jobId}`)
-    const botRes = await fetch(`${hostname}/api/botcommander/bots/${botId}`)
+    const res = await fetch(`${hostUrl}/api/botcommander/jobs/${botId}/${jobId}`)
+    const botRes = await fetch(`${hostUrl}/api/botcommander/bots/${botId}`)
     const refreshedBotInfo = await botRes.json()
     const refreshedJobInfo = await res.json()
     setBot(refreshedBotInfo)
@@ -101,16 +100,17 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   // console.log(session)
   const query = ctx.query
   const { botId, id } = query
-  const hostname = process.env.HOST_URL || 'http://localhost:3000'
+  const hostUrl = process.env.HOST_URL || 'http://localhost:3000'
   const options = { headers: { cookie: ctx.req.headers.cookie } }
-  const res = await fetch(`${hostname}/api/botcommander/jobs/${botId}/${id}`, options)
-  const botRes = await fetch(`${hostname}/api/botcommander/bots/${botId}`, options)
+  const res = await fetch(`${hostUrl}/api/botcommander/jobs/${botId}/${id}`, options)
+  const botRes = await fetch(`${hostUrl}/api/botcommander/bots/${botId}`, options)
   const botInfo = await botRes.json()
   const jobInfo = await res.json()
   return {
     props: {
       jobInfo,
       botInfo,
+      hostUrl,
     },
   }
 }
