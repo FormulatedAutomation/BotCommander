@@ -12,12 +12,11 @@
 -   [Formulated Automation Podcast](https://www.formulatedautomation.com/category/podcast/)
 
 
-# FormulatedAutomation-Profiler
+# Bot Commander
 
 [![FormulatedAutomation](https://circleci.com/gh/FormulatedAutomation/Profiler.svg?style=shield)](https://app.circleci.com/pipelines/github/FormulatedAutomation/Profiler)
-[![PyPI version](https://badge.fury.io/py/fa-profiler.svg)](https://badge.fury.io/py/fa-profiler)
 
-![image](https://user-images.githubusercontent.com/2868/86496363-2473ff00-bd4b-11ea-868a-ee07a2ace9d9.png)
+![image](https://user-images.githubusercontent.com/2868/95122864-20c39000-071f-11eb-86c8-63820b013ae4.png)
 
 ### Introduction
 
