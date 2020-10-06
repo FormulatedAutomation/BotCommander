@@ -1,7 +1,7 @@
 ![Formulated Logo](https://www.formulatedautomation.com/wp-content/uploads/2020/07/Subtract-660x20-1.svg)
 
 
-**Formulated Autoamation RPA Resources**
+**Formulated Automation RPA Resources**
 
 
 -   [/r/OpenSourceRPA](https://reddit.com/r/OpenSourceRPA)
