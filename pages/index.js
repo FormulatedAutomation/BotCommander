@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/client'
 import PublicLayout from '../components/PublicLayout'
 
 export default function Page () {
-  const [session, loading] = useSession()
+  const [session] = useSession()
 
   useEffect(() => {
     if (session) {
