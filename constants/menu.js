@@ -1,8 +1,8 @@
 const MENU = [
   {
-    label: "Bots",
-    link: '/bots'
+    label: 'Bots',
+    link: '/bots',
   },
-];
+]
 
-export default MENU;
+export default MENU

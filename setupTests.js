@@ -6,5 +6,5 @@
 import '@testing-library/jest-dom/extend-expect'
 import { config } from 'dotenv'
 
-config({path: './.env.test'})
-config({path: './.env'})
+config({ path: './.env.test' })
+config({ path: './.env' })

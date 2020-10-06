@@ -17,6 +17,7 @@ module.exports = {
     browser: true,
     'jest/globals': true,
   },
+  ignorePatterns: ['node_modules/**'],
   settings: {
     react: {
       version: 'detect',
