@@ -52,6 +52,12 @@ export class UiPathJob extends Job {
       id: this.jobKey,
       state: JobState[this.state(this.jobInfo.State)],
       info: this.jobInfo,
+      input: {
+        arguments: this.jobInfo.InputArguments,
+      },
+      output: {
+        arguments: this.jobInfo.OutputArguments,
+      },
     }
   }
 }
