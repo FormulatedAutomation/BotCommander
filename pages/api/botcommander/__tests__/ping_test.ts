@@ -39,7 +39,7 @@ describe('/api/botcommander/ping', () => {
   })
 
   test('responds 200 to authed GET', async () => {
-    expect.assertions(1)
+    expect.assertions(3)
     const requestHandler = (req, res) => {
       return apiResolver(req, res, undefined, Ping, null, false)
     }
@@ -53,5 +53,8 @@ describe('/api/botcommander/ping', () => {
     }
     const response = await fetch(url, opts)
     expect(response.status).toBe(200)
+    const json = await response.json()
+    expect(json.bots.length).toEqual(2)
+    expect(json.token.email).toEqual('m@mdp.im')
   })
 })

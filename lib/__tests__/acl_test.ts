@@ -45,6 +45,6 @@ it('should fail against and unauthorized email with regex', () => {
 
 it('should list only the bots available to a user', () => {
   const aclObj = new ACL(acl, botInstances)
-  expect(aclObj.isAllowed(getEmailToken('m@mdp.im'), 'ACL.Demo.Bot')).toEqual(false)
+  expect(aclObj.isAllowed(getEmailToken('m@mdp.im'), 'No.Access.Bot')).toEqual(false)
   expect(aclObj.listBots(getEmailToken('m@mdp.im')).length).toEqual(2)
 })

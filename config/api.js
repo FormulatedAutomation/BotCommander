@@ -46,9 +46,9 @@ export const bots =
     },
   },
   {
-    id: 'ACL.Demo.Bot',
+    id: 'No.Access.Bot',
     name: 'ACL Demo Bot',
-    description: 'A bot that should be available to no one',
+    description: 'A bot that should be available to no one - For test purposes',
     secret: 'abc123',
     workspaceId: '12345332-33d9-4cdf-acd4-222222222222',
     processId: '12323456-5160-43f4-a82c-222222222222',
