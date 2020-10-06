@@ -6,7 +6,16 @@ import { promisify } from 'util'
 const secretPath = path.join(process.cwd(), '/config/secret.txt')
 const MIN_SECRET_LEN = 25 // Even in base64, this would be less than 128 bits of entropy
 
-const fsExists = promisify(fs.exists)
+const fsExists = (path) => {
+  return new Promise((resolve) => {
+    fs.access(path, fs.constants.F_OK, (err) => {
+      if (err) {
+        return resolve(false)
+      }
+      return resolve(true)
+    })
+  })
+}
 const fsReadFile = promisify(fs.readFile)
 
 export async function get (): Promise<string> {
