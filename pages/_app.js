@@ -2,16 +2,22 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import '../styles/main.css'
 import { Provider } from 'next-auth/client'
+import withConfig from '../utils/withConfig'
+import App, { Container } from 'next/app';
 
-export default function App ({ Component, pageProps }) {
-  return (
-    <Provider session={pageProps.session}>
-      <Component {...pageProps} />
-    </Provider>
-  )
+class BotCommander extends App {
+  render() {
+    const { Component, pageProps } = this.props;
+    return (
+      <Provider session={pageProps.session}>
+        <Component {...pageProps} />
+      </Provider>
+    )
+  }
 }
-
-App.propTypes = {
+BotCommander.propTypes = {
   Component: PropTypes.func,
   pageProps: PropTypes.object,
 }
+
+export default withConfig(BotCommander)
