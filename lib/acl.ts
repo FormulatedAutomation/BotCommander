@@ -40,7 +40,10 @@ export class ACL {
   }
 
   // Get back a list of bots that a user is allowed to use
-  listBots (token: Token): Bot[] {
+  listBots (token: Token | null): Bot[] {
+    if (!token) {
+      return []
+    }
     const allowedBots = []
     for (const bot of this.bots) {
       const botAclGroups = bot.botConfig.acl.groups

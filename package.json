@@ -7,12 +7,14 @@
     "build": "next build",
     "start": "next start -p $PORT",
     "test": "jest",
-    "lint": "eslint \"pages/**\" \"lib/**\" \"server/**\" \"components/**\"",
+    "lint": "eslint \"pages/**\" \"lib/**\" \"server/**\" \"components/**\" \"tests/**\"",
+    "lint-fix": "eslint \"pages/**\" \"lib/**\" \"server/**\" \"components/**\" \"tests/**\" --fix",
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.0",
     "@tailwindcss/ui": "^0.1.3",
+    "@types/test-listen": "^1.1.0",
     "@zeit/next-css": "^1.0.1",
     "classnames": "^2.2.6",
     "config": "^3.3.1",
@@ -27,6 +29,7 @@
     "react-dom": "16.13.1",
     "react-json-view": "^1.19.1",
     "tailwindcss": "^1.2.0",
+    "test-listen": "^1.1.0",
     "tsx": "^1.0.0",
     "uipath-orchestrator": "^1.1.3",
     "winston": "^3.3.3"
