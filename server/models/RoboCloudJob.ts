@@ -23,6 +23,8 @@ export class RoboCloudJob extends Job {
       return JobState.Pending
     } else if (state === 'IP') {
       return JobState.Pending
+    } else if (state === 'INI') {
+      return JobState.Pending
     } else if (state === 'IND') {
       return JobState.Pending
     }
