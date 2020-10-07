@@ -9,43 +9,39 @@ interface OutputArgs {
   [key: string]: any
 }
 
-const TBody = ({ obj, keyPrefix }: {obj: object, keyPrefix: string}) => {
-  return <tbody>
+const KeyList = ({ obj, keyPrefix }: { obj: object, keyPrefix: string }) => {
+  return <div>
     {
       Object.keys(obj).map((key, idx) => {
         return (
-          <tr key={`${keyPrefix}-${idx}`}>
-            <td className="border px-4 py-2">{key}</td>
-            <td className="border px-4 py-2">{obj[key]}</td>
-          </tr>
+          <div className="sm:col-span-1" key={`${keyPrefix}-${idx}`}>
+            <dt className="text-sm leading-5 font-medium text-gray-500">
+              {key}
+            </dt>
+            <dd className="mt-1 text-sm leading-5 text-gray-900">
+              {obj[key]}
+            </dd>
+          </div>
         )
       })
     }
 
-  </tbody>
+  </div>
 }
 
 const InputOutputArgs: FunctionComponent<{ inputArgs: InputArgs, outputArgs: OutputArgs }> = ({ inputArgs, outputArgs }) => {
-  return <div className="pb-10">
-    <table className="table-auto">
-      <thead>
-        <tr>
-          <th className="px-4 py-2">InputName</th>
-          <th className="px-4 py-2">Value</th>
-        </tr>
-      </thead>
-      <TBody obj={inputArgs} keyPrefix="input"></TBody>
-    </table>
-    <table className="table-auto mt-5">
-      <thead>
-        <tr>
-          <th className="px-4 py-2">Output Name</th>
-          <th className="px-4 py-2">Value</th>
-        </tr>
-      </thead>
-      <TBody obj={outputArgs} keyPrefix="output"></TBody>
-    </table>
-  </div>
+  return (
+    <div>
+      <div className="border-b border-gray-200">
+        <h3 className="text-lg leading-6 font-medium text-gray-900 mb-3">
+          Run Results
+        </h3>
+      </div>
+      <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 mt-3">
+        <KeyList obj={inputArgs}  keyPrefix="input" />
+        <KeyList obj={outputArgs} keyPrefix="output" />
+      </dl>
+    </div>)
 }
 
 InputOutputArgs.propTypes = {

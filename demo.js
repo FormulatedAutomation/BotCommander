@@ -4,7 +4,7 @@ const { OrchestratorApi } = require('uipath-orchestrator-api-node')
 const oc = new OrchestratorApi(config)
 
 const main = async () => {
-  const token = await oc.authenticate()
+  await oc.authenticate()
   const releases = await oc.release.findAll()
   console.log(releases)
   const release = releases.find((r) => r.ProcessKey === 'Turkish.Lira.to.USD')
