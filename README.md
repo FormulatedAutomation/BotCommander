@@ -35,7 +35,41 @@ npm install
 
 ### Connecting UiPath
 
-TBD
+To connect your UiPath bot, you need both the account API credentials as well as the bots basic information.
+
+API credentials will be listed in under 'sources' in `config/api.js`, while the bot will be under `bots`
+
+An example of a UiPath source config would be:
+
+```jsx
+{
+   uipath: {
+    platformHostname: 'platform.uipath.com',
+    path: 'organization/myServiceInstanceLogicalName',
+    refreshToken: process.env.UIPATH_REFRESH_TOKEN,
+    serviceInstanceLogicalName: 'myServiceInstanceLogicalName',
+    clientId: 'abc123456',
+  },
+```
+
+Once you've defined a source, you can then define the bots which will use those source credentials to interact with the API.
+
+The definiation of a UiPath bot looks like this:
+
+```js
+  {
+    id: 'Turkish.Lira.to.USD',
+    name: 'Turkish Lira Conversion Bot',
+    description: 'Converts Turkish Lira to USD',
+    source: 'uipath',
+    type: 'uipath',
+    acl: {
+      groups: ['admins', 'users'],
+    },
+  },
+```
+
+For more details about where to find these keys, [click here](uipath_credentials_how_to.md).
 
 ### Connecting Robocloud
 
