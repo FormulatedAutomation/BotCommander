@@ -12,7 +12,7 @@ const BotRunForm = ({ botInfo, setInputArgs, handleSubmit, loading }) => {
 
       <div className="py-3">
 
-        <InputArgsFields inputArgs={botInfo.properties.InputArguments}
+        <InputArgsFields inputArgs={botInfo.arguments.inputs}
           inputArgsChanges={setInputArgs}/>
 
         <span className="inline-flex rounded-md shadow-sm mt-3 mb-3">

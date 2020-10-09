@@ -12,6 +12,7 @@ export class RoboCloudBot extends Bot {
     this.id = botConfig.id
     this.botConfig = botConfig
     this.api = new RoboCloudAPI(this)
+    this.arguments = botConfig.arguments
   }
 
   async start (inputArgs: object): Promise<JobStartResponse> {

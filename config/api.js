@@ -34,13 +34,22 @@ export const bots =
     },
   },
   {
-    id: 'Robocloud.Demo',
-    name: 'Code Scraper',
-    description: 'Code Violations Scraper',
-    secret: process.env.CODE_VIOLATION_BOT_SECRET,
-    workspaceId: '971988d2-33d9-4cdf-acd4-2d7f7b64814e',
-    processId: '0acf110e-5160-43f4-a82c-9c1b5a2472dc',
+    id: 'Stock.History',
+    name: 'Stock History Bot',
+    description: 'Stock History Downloader',
+    secret: process.env.STOCK_HISTORY_SECRET,
+    workspaceId: 'da69252b-22dd-4852-a316-5074e316ace7',
+    processId: '136e1ea8-e6ae-4da6-b3d3-cfc4227fa3d9',
     type: 'robocloud',
+    arguments: {
+      inputs: [
+        {
+          name: 'ticker',
+          displayName: 'Ticker',
+          type: 'string',
+        },
+      ],
+    },
     acl: {
       groups: ['admins', 'users'],
     },

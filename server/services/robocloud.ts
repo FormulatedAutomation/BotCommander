@@ -13,9 +13,12 @@ export default class RoboCloudAPI {
   }
 
   async start (args: object) {
+    const body = {
+      variables: args || {},
+    }
     const options = {
       method: 'POST',
-      body: JSON.stringify(args || {}),
+      body: JSON.stringify(body),
       headers: {
         'Content-Type': 'application/json',
         'robocloud-process-secret': this.secret,
@@ -25,7 +28,9 @@ export default class RoboCloudAPI {
       `https://api.eu1.robocloud.eu/workspace-v1/workspaces/${this.workspaceId}/processes/${this.processId}/runs`,
       options,
     )
-    return await result.json()
+    const resJson = await result.json()
+    console.log(resJson)
+    return await resJson
   }
 
   async status (id: string) {

@@ -5,14 +5,14 @@ import { UiPathJob } from './UiPathJob'
 import { Bot } from './Bot'
 import { JobStartResponse } from './Job'
 
-export interface UiPathInputArgument {
+export interface UiPathArgument {
   name: string
   type: string
   [key: string]: any
 }
 
 export interface UiPathBotInfo {
-  InputArguments: UiPathInputArgument[]
+  InputArguments: UiPathArgument[]
   OutputArguments: []
   State: string
   Key: string
@@ -56,7 +56,7 @@ export class UiPathBot extends Bot {
   }
 
   serializeArguments (args: object): object {
-    for (const inputArg of this.botInfo.InputArguments) {
+    for (const inputArg of this.arguments.inputs) {
       if (inputArg.type === 'integer') {
         if (Object.hasOwnProperty.call(args, inputArg.name)) {
           args[inputArg.name] = parseInt(args[inputArg.name], 10)
@@ -69,9 +69,11 @@ export class UiPathBot extends Bot {
   // Deserialize odd fields like the inputs and outputs
   deserializeArguments (jobInfoJSON: any): UiPathBotInfo {
     const result: UiPathBotInfo = Object.assign({}, jobInfoJSON)
-    result.InputArguments = JSON.parse(jobInfoJSON.Arguments.Input)
-    result.OutputArguments = JSON.parse(jobInfoJSON.Arguments.Output)
-    for (const argument of result.InputArguments) {
+    this.arguments = {
+      inputs: JSON.parse(jobInfoJSON.Arguments.Input),
+      outputs: JSON.parse(jobInfoJSON.Arguments.Output),
+    }
+    for (const argument of this.arguments.inputs) {
       if (/^System.Int32/.test(argument.type)) {
         argument.type = 'integer'
       }

@@ -43,16 +43,13 @@ const BotView = ({ botInfo }: AppProps) => {
               </div>
             </div>
           </div>
-          {botInfo.type === 'uipath' ? (
+          {botInfo.arguments && botInfo.arguments.inputs ? (
             <BotRunForm botInfo={botInfo}
               setInputArgs={setInputArgs}
               loading={loading}
               handleSubmit={handleBotRun} />
-          ) : (false)}
+          ) : <div className="px-4 py-4"><BotRunButton loading={loading} handlePress={handleBotRun} /></div> }
 
-          {botInfo.type === 'robocloud' ? (
-            <div className="px-4 py-4"><BotRunButton loading={loading} handlePress={handleBotRun} /></div>
-          ) : (false)}
           <div className="px-4 py-5 sm:p-0">
             <dl>
               <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
@@ -113,6 +110,16 @@ const BotView = ({ botInfo }: AppProps) => {
                 </dt>
                 <dd className="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
                   <DynamicReactJson src={botInfo.acl} collapsed={false} name={false} />
+                </dd>
+              </div>
+            </dl>
+            <dl>
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                <dt className="text-sm leading-5 font-medium text-gray-500">
+                  Arguments
+                </dt>
+                <dd className="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+                  <DynamicReactJson src={botInfo.arguments} collapsed={false} name={false} />
                 </dd>
               </div>
             </dl>

@@ -12,6 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, ctx: BotComman
   if (bot) {
     const botJSON: any = bot.definition()
     botJSON.properties = await bot.properties()
+    botJSON.arguments = await bot.arguments
     res.json(botJSON)
     return
   }
