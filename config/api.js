@@ -10,7 +10,6 @@ export const acl = {
     users: {
       emails: [
         '/^[A-Z0-9._\\-+\\%]+@formulatedautomation.com$/i',
-        '*@fultonworks.co',
       ],
     },
     anotherGroup: {
