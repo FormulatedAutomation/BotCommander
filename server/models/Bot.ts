@@ -1,21 +1,18 @@
 import { BotConfig } from '../../lib/config'
 import { Job } from './Job'
-
-export interface BotArgument {
-  name: string
-  type: string
-  [key: string]: any
-}
+import { BotArgument, BotObject } from './types'
 
 export abstract class Bot {
   abstract async properties(force?: boolean): Promise<object>;
   abstract definition(): object;
   abstract start(inputArgs: object): object;
   abstract getJob(jobId: string): Job;
+  abstract async toJSON(): Promise<BotObject>;
+
   id: string;
   botConfig: BotConfig;
   arguments?: {
-    inputs: BotArgument[],
-    outputs: BotArgument[],
+    input: BotArgument[],
+    output: BotArgument[],
   }
 }

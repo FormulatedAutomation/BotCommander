@@ -3,6 +3,7 @@ import RoboCloudAPI from '../services/robocloud'
 import { RoboCloudJob } from './RoboCloudJob'
 import { Bot } from './Bot'
 import { JobStartResponse } from './Job'
+import { BotObject } from './types'
 
 export class RoboCloudBot extends Bot {
   api: RoboCloudAPI;
@@ -32,6 +33,22 @@ export class RoboCloudBot extends Bot {
     // Drop the secret, this should never be revealed
     delete clone.secret
     return clone
+  }
+
+  // the object we pass back via API
+  async toJSON (): Promise<BotObject> {
+    const properties = await this.properties()
+    const definition = this.definition()
+    return {
+      id: this.id,
+      name: definition.name,
+      description: definition.description,
+      type: definition.type,
+      source: definition.source,
+      arguments: definition.arguments,
+      properties,
+      definition,
+    }
   }
 
   getJob (jobId: string): RoboCloudJob {

@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import Layout from '../../components/Layout'
-import { AppProps } from 'next/dist/next-server/lib/router/router'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import dynamic from 'next/dynamic'
 import ErrorAlert from '../../components/ErrorAlert'
 import BotRunForm from '../../components/BotRunForm'
 import BotRunButton from '../../components/BotRunButton'
 import Router from 'next/router'
+import { BotObject } from '../../server/models/types'
 const DynamicReactJson = dynamic(import('react-json-view'), { ssr: false })
 
-const BotView = ({ botInfo }: AppProps) => {
+const BotView = ({ botInfo }: {botInfo: BotObject}) => {
   const [loading, setLoading] = useState(false)
   const [inputArgs, setInputArgs] = useState({})
   const [runError, setRunError] = useState(null)
@@ -43,7 +43,7 @@ const BotView = ({ botInfo }: AppProps) => {
               </div>
             </div>
           </div>
-          {botInfo.arguments && botInfo.arguments.inputs ? (
+          {botInfo.arguments && botInfo.arguments.input ? (
             <BotRunForm botInfo={botInfo}
               setInputArgs={setInputArgs}
               loading={loading}
@@ -103,16 +103,6 @@ const BotView = ({ botInfo }: AppProps) => {
               </div>
             </dl>
 
-            <dl>
-              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-                <dt className="text-sm leading-5 font-medium text-gray-500">
-                  Access
-                </dt>
-                <dd className="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
-                  <DynamicReactJson src={botInfo.acl} collapsed={false} name={false} />
-                </dd>
-              </div>
-            </dl>
             <dl>
               <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                 <dt className="text-sm leading-5 font-medium text-gray-500">

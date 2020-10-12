@@ -2,6 +2,7 @@ import { Response } from 'node-fetch'
 import RoboCloudAPI from '../services/robocloud'
 import { Bot } from './Bot'
 import { Job, JobState } from './Job'
+import { JobObject } from './types'
 
 export class RoboCloudJob extends Job {
   bot: Bot;
@@ -31,7 +32,7 @@ export class RoboCloudJob extends Job {
     return JobState.Failed
   }
 
-  async properties () {
+  async toJSON (): Promise<JobObject> {
     const status = await this.service.status(this.runId)
     const state = this.state(status.state)
     let artifacts = []

@@ -1,5 +1,7 @@
 import Orchestrator from 'uipath-orchestrator'
 import { Exception } from '../../lib/Exception'
+import { UiPathArgument, UiPathBotInfo } from '../models/types'
+import { UiPathJobInfo } from '../models/UiPathJob'
 
 export default class UiPathAPI {
   findJob (jobKey: string): object | PromiseLike<object> {
@@ -24,7 +26,7 @@ export default class UiPathAPI {
     })
   }
 
-  async status (jobId: string): Promise<object> {
+  async status (jobId: string): Promise<UiPathJobInfo> {
     return new Promise((resolve, reject) => {
       const url = '/odata/Jobs'
       const query = {
@@ -43,7 +45,7 @@ export default class UiPathAPI {
     })
   }
 
-  async findByProcessKey (processKey: string): Promise<object> {
+  async findByProcessKey (processKey: string): Promise<UiPathBotInfo> {
     return new Promise((resolve, reject) => {
       const url = '/odata/Releases'
       const query = {
@@ -61,4 +63,16 @@ export default class UiPathAPI {
       })
     })
   }
+}
+
+export function deserializeArguments (args: string): UiPathArgument[] {
+  const argsObj = JSON.parse(args)
+  for (const argument of argsObj) {
+    if (/^System.Int32/.test(argument.type)) {
+      argument.type = 'integer'
+    } else if (/^System.String/.test(argument.type)) {
+      argument.type = 'string'
+    }
+  }
+  return argsObj
 }

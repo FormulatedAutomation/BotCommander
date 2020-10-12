@@ -12,5 +12,9 @@ export interface JobStartResponse {
 }
 
 export abstract class Job {
-  abstract async properties(): Promise<object>
+  abstract async toJSON(): Promise<object>
+  arguments?: {
+    input: any[],
+    output: any[],
+  }
 }

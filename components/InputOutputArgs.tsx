@@ -38,15 +38,15 @@ const InputOutputArgs: FunctionComponent<{ inputArgs: InputArgs, outputArgs: Out
         </h3>
       </div>
       <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 mt-3">
-        <KeyList obj={inputArgs}  keyPrefix="input" />
+        <KeyList obj={inputArgs} keyPrefix="input" />
         <KeyList obj={outputArgs} keyPrefix="output" />
       </dl>
     </div>)
 }
 
 InputOutputArgs.propTypes = {
-  inputArgs: PropTypes.array,
-  outputArgs: PropTypes.array,
+  inputArgs: PropTypes.object,
+  outputArgs: PropTypes.object,
 }
 
 export default InputOutputArgs

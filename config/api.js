@@ -41,7 +41,7 @@ export const bots =
     processId: '136e1ea8-e6ae-4da6-b3d3-cfc4227fa3d9',
     type: 'robocloud',
     arguments: {
-      inputs: [
+      input: [
         {
           name: 'ticker',
           displayName: 'Ticker',

@@ -1,5 +1,6 @@
 import UiPathAPI from '../services/uipath'
 import { Job, JobState } from './Job'
+import { JobObject } from './types'
 
 export interface UiPathJobInfo {
   InputArguments: object
@@ -21,11 +22,11 @@ export class UiPathJob extends Job {
   }
 
   // Deserialize odd fields like the inputs and outputs
-  deserialize (jobInfoJSON: any): UiPathJobInfo {
-    const result = Object.assign({}, jobInfoJSON)
-    result.InputArguments = JSON.parse(jobInfoJSON.InputArguments)
-    result.OutputArguments = JSON.parse(jobInfoJSON.OutputArguments)
-    return result
+  deserialize (jobInfoJSON: any): void {
+    this.arguments = {
+      input: JSON.parse(jobInfoJSON.InputArguments),
+      output: JSON.parse(jobInfoJSON.OutputArguments),
+    }
   }
 
   // Normalize the states
@@ -40,22 +41,18 @@ export class UiPathJob extends Job {
     return JobState.Failed
   }
 
-  async properties (force?: boolean) {
+  async toJSON (forceRefresh?: boolean): Promise<JobObject> {
     // get the processes information and store it on the class instance
     // Don't refetch unless it's forced
-    if (this.jobInfo && !force) {
-      return this.jobInfo
+    if (!this.jobInfo || forceRefresh) {
+      this.jobInfo = await this.api.status(this.jobKey)
+      this.deserialize(this.jobInfo)
     }
-    const jobInfo = await this.api.status(this.jobKey)
-    this.jobInfo = this.deserialize(jobInfo)
     return {
       id: this.jobKey,
       state: JobState[this.state(this.jobInfo.State)],
-      info: this.jobInfo,
-      arguments: {
-        input: this.jobInfo.InputArguments,
-        output: this.jobInfo.OutputArguments,
-      },
+      properties: this.jobInfo,
+      arguments: this.arguments,
     }
   }
 }

@@ -7,7 +7,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, context: BotCo
   const botId: string = Array.isArray(req.query.botId) ? req.query.botId[0] : req.query.botId
   const bot = bots.find((b) => b.id === botId)
   const job = bot.getJob(id)
-  const info = await job.properties()
+  const info = await job.toJSON()
   res.statusCode = 200
   res.json(info)
 }

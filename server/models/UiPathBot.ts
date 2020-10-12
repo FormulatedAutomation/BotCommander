@@ -1,22 +1,10 @@
 import { BotConfig } from '../../lib/config'
 import logger from '../../lib/logging'
-import UiPathAPI from '../services/uipath'
+import UiPathAPI, { deserializeArguments as deserializeUiPathArgs } from '../services/uipath'
 import { UiPathJob } from './UiPathJob'
 import { Bot } from './Bot'
 import { JobStartResponse } from './Job'
-
-export interface UiPathArgument {
-  name: string
-  type: string
-  [key: string]: any
-}
-
-export interface UiPathBotInfo {
-  InputArguments: UiPathArgument[]
-  OutputArguments: []
-  State: string
-  Key: string
-}
+import { BotObject, UiPathBotInfo } from './types'
 
 export class UiPathBot extends Bot {
   api: UiPathAPI;
@@ -56,7 +44,7 @@ export class UiPathBot extends Bot {
   }
 
   serializeArguments (args: object): object {
-    for (const inputArg of this.arguments.inputs) {
+    for (const inputArg of this.arguments.input) {
       if (inputArg.type === 'integer') {
         if (Object.hasOwnProperty.call(args, inputArg.name)) {
           args[inputArg.name] = parseInt(args[inputArg.name], 10)
@@ -67,29 +55,38 @@ export class UiPathBot extends Bot {
   }
 
   // Deserialize odd fields like the inputs and outputs
-  deserializeArguments (jobInfoJSON: any): UiPathBotInfo {
-    const result: UiPathBotInfo = Object.assign({}, jobInfoJSON)
+  deserializeArguments (jobInfoJSON: any): void {
     this.arguments = {
-      inputs: JSON.parse(jobInfoJSON.Arguments.Input),
-      outputs: JSON.parse(jobInfoJSON.Arguments.Output),
+      input: deserializeUiPathArgs(jobInfoJSON.Arguments.Input),
+      output: deserializeUiPathArgs(jobInfoJSON.Arguments.Output),
     }
-    for (const argument of this.arguments.inputs) {
-      if (/^System.Int32/.test(argument.type)) {
-        argument.type = 'integer'
-      }
-    }
-    return result
   }
 
-  async properties (force?: boolean) {
+  async properties (force?: boolean): Promise<UiPathBotInfo> {
     if (this.botInfo && !force) {
       return this.botInfo
     }
-    const botInfo = await this.api.findByProcessKey(this.id)
-    this.botInfo = this.deserializeArguments(botInfo)
+    this.botInfo = await this.api.findByProcessKey(this.id)
+    this.deserializeArguments(this.botInfo)
     return this.botInfo
     // get the processes information and store it on the class instance
     // Don't refetch unless it's forced
+  }
+
+  // the object we pass back via API
+  async toJSON (): Promise<BotObject> {
+    const properties = await this.properties()
+    const definition = this.definition()
+    return {
+      id: this.id,
+      name: definition.name,
+      description: definition.description,
+      type: definition.type,
+      source: definition.source,
+      arguments: this.arguments,
+      properties,
+      definition,
+    }
   }
 
   definition (): BotConfig {
