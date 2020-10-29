@@ -5,6 +5,8 @@ export const acl = {
         'm@mdp.im',
         'percival@gmail.com',
         'brent@brentsanders.io',
+        'brent@formulatedautomation.com',
+        'josh@formulatedautomation.com'
       ],
     },
     users: {
@@ -14,7 +16,7 @@ export const acl = {
     },
     anotherGroup: {
       emails: [
-        'foo@foo.com',
+        'tanguy@vialive.com',
       ],
     },
   },
@@ -23,22 +25,12 @@ export const acl = {
 export const bots =
 [
   {
-    id: 'Turkish.Lira.to.USD',
-    name: 'Turkish Lira Conversion Bot',
-    description: 'Converts Turkish Lira to USD',
-    source: 'uipath',
-    type: 'uipath',
-    acl: {
-      groups: ['admins', 'users'],
-    },
-  },
-  {
-    id: 'Stock.History',
-    name: 'Stock History Bot',
-    description: 'Stock History Downloader',
-    secret: process.env.STOCK_HISTORY_SECRET,
-    workspaceId: 'da69252b-22dd-4852-a316-5074e316ace7',
-    processId: '136e1ea8-e6ae-4da6-b3d3-cfc4227fa3d9',
+    id: 'ViaLive_EventBrite',
+    name: 'EventBrite Cloud',
+    description: 'Runs Eventbrite registration in the cloud',
+    secret: process.env.EVENTBRITE_BOT_SECRET,
+    workspaceId: 'a9fcaa8df8df49ce9a6c7fd002595dd9',
+    processId: '84dc9bc3-36a7-418b-8cfb-32ff52693dc6',
     type: 'robocloud',
     arguments: {
       input: [
@@ -51,18 +43,6 @@ export const bots =
     },
     acl: {
       groups: ['admins', 'users'],
-    },
-  },
-  {
-    id: 'No.Access.Bot',
-    name: 'ACL Demo Bot',
-    description: 'A bot that should be available to no one - For test purposes',
-    secret: 'abc123',
-    workspaceId: '12345332-33d9-4cdf-acd4-222222222222',
-    processId: '12323456-5160-43f4-a82c-222222222222',
-    type: 'robocloud',
-    acl: {
-      groups: ['anotherGroup'],
     },
   },
 ]
