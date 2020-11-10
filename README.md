@@ -1,4 +1,4 @@
-![Formulated Logo](https://www.formulatedautomation.com/wp-content/uploads/2020/07/Subtract-660x20-1.svg)
+![FA Github Header](https://user-images.githubusercontent.com/2868/98735818-fabe8a80-2371-11eb-884a-e555e31aa348.png)
 
 # Bot Commander
 
